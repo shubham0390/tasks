@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="remove_completed_tasks">Remove Completed Tasks</string>
+    <string name="no_tasks">No tasks.</string>
+    <string name="app_name">Task Manager</string>
+    <string name="tasks">Tasks</string>
+    <string name="add_task">Add Task</string>
+    <string name="cancel_task">Cancel</string>
+    <string name="unsaved_changes_title">Unsaved Changes</string>
+    <string name="unsaved_changes_message">Would you like to add this task?</string>
+    <string name="discard">Discard</string>
+    <string name="empty_text_no_conntent">No task</string>
+    <string name="task_description">Task Description</string>
+    <string name="title_activity_splash">SplashActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="task_notification_title">Pending Tasks</string>
+
+    <string name="task_notification_placeholder_text">You have %1$d .Click here to se all pending tasks.
+    </string>
+
+    <string name="action_share">Share</string>
+    <string name="action_reply">Reply</string>
+</resources>
