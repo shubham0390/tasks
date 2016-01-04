@@ -44,8 +44,6 @@ public class TaskDataAdapter {
 
     public List<Task> getTaskByStatus(String taskStatus) {
         List<Task> taskList = new ArrayList<>();
-    /*    Cursor cursor = mSQLiteDatabase.query(TaskContract.TaskColumn.TASKS_TABLE, TaskContract.TASK_PROJECTION,
-                TaskContract.TaskColumn.TASK_STATUS + "=?", new String[]{taskStatus}, null, null, null);*/
         Cursor cursor = mSQLiteDatabase.query(TaskContract.TaskColumn.TASKS_TABLE, TaskContract.TASK_PROJECTION,
                 null, null, null, null, null);
 
