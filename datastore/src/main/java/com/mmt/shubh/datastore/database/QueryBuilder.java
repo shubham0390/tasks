@@ -1,6 +1,5 @@
 package com.mmt.shubh.datastore.database;
 
-import android.text.TextUtils;
 
 import com.mmt.shubh.datastore.DSUtil;
 
@@ -13,7 +12,7 @@ public class QueryBuilder {
     static final String FROM = "FROM";
     static final String ALL = "*";
     static final String WHERE = "WHERE";
-    static final String SPACE = "";
+    static final String SPACE = " ";
     static final String SORT_BY = "ORDER BY";
     static final String ASC = "ASC";
     static final String DESC = "DESC";

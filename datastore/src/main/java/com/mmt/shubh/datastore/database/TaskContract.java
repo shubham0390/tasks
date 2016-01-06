@@ -38,7 +38,7 @@ public interface TaskContract {
                     TaskContract.TaskColumn.START_DATE + " TEXT NOT NULL, " +
                     TaskContract.TaskColumn.CREATED_DATE + " INTEGER NOT NULL, " +
                     TaskContract.TaskColumn.PROGRESS + " TEXT NOT NULL, " +
-                    TaskContract.TaskColumn.COMPLETION_DATE + " TEXT" +
+                    TaskContract.TaskColumn.COMPLETION_DATE + " TEXT, " +
                     TaskContract.TaskColumn.STATUS + " TEXT" +
                     " ); ";
 
@@ -51,6 +51,6 @@ public interface TaskContract {
             "CREATE TABLE " + TaskContract.NOTES_TABLE_NAME + " (" +
                     TaskContract.TaskColumn._ID + " INTEGER PRIMARY KEY, " +
                     NotesColumn.DESCRIPTION + " TEXT NOT NULL, " +
-                    NotesColumn.KEY_TASK + " INTEGER, " +
+                    NotesColumn.KEY_TASK + " INTEGER " +
                     " ); ";
 }

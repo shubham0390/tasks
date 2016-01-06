@@ -1,4 +1,4 @@
-package com.mmt.shubh.taskmanager;
+package com.mmt.shubh.taskmanager.notification;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -13,6 +13,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
+import com.mmt.shubh.taskmanager.Constants;
+import com.mmt.shubh.taskmanager.R;
 import com.mmt.shubh.taskmanager.ui.activities.HomeActivity;
 
 /**

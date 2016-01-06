@@ -2,12 +2,14 @@ package com.mmt.shubh.datastore.adapter;
 
 import java.util.List;
 
+import rx.Observable;
+
 /**
  * Created by shubham on 12/23/15.
  */
 public interface IDataAdapter<M> {
 
-    List<M> getAll();
+    Observable<List<M>> getAll();
 
     M getById(long id);
 

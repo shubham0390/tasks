@@ -3,9 +3,10 @@ package com.mmt.shubh.taskmanager;
 import android.content.Context;
 import android.content.res.AssetManager;
 
-import com.mmt.shubh.taskmanager.tasks.Task;
-import com.mmt.shubh.taskmanager.db.TaskContract;
-import com.mmt.shubh.taskmanager.db.TaskDataAdapter;
+
+import com.mmt.shubh.datastore.adapter.TaskDataAdapter;
+import com.mmt.shubh.datastore.database.TaskContract;
+import com.mmt.shubh.datastore.model.Task;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,6 +20,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import rx.Observable;
+import rx.Subscriber;
+import timber.log.Timber;
+
 /**
  * Created by Subham Tyagi,
  * on 05/Aug/2015,
@@ -27,37 +34,60 @@ import java.util.List;
  */
 public class JsonParser {
 
+    TaskDataAdapter mTaskDataAdapter;
+    Context mContext;
 
-    public void seedData(Context context) {
-        String jsonString = readFromFile(context);
-        List<Task> taskList = new ArrayList<>();
-        try {
-            JSONArray jsonArray = new JSONArray(jsonString);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                Task task = new Task();
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
+    @Inject
+    public JsonParser(TaskDataAdapter taskDataAdapter, Context context) {
+        mTaskDataAdapter = taskDataAdapter;
+        mContext = context;
+        Timber.tag(this.getClass().getName());
+    }
 
-                String title = jsonObject.getString(TaskContract.TaskColumn.TASK_TITLE);
-                String enddate = jsonObject.getString(TaskContract.TaskColumn.END_DATE);
-                String startdate = jsonObject.getString(TaskContract.TaskColumn.START_DATE);
-                String description = jsonObject.getString(TaskContract.TaskColumn.TASK_DESCRIPTION);
-                String status = jsonObject.getString(TaskContract.TaskColumn.TASK_STATUS);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    public Observable<Boolean> seedData() {
 
-                task.setEndDate(dateFormat.parse(enddate).getTime());
-                task.setStartDate(dateFormat.parse(startdate).getTime());
-                task.setTitle(title);
-                task.setTaskStatus(TaskStatus.valueOf(status));
-                task.setDescription(description);
-                taskList.add(task);
+        return Observable.create((Observable.OnSubscribe<Boolean>) subscriber -> {
+            String jsonString = readFromFile(mContext);
+            List<Task> taskList = new ArrayList<>();
+            try {
+                createTaskList(jsonString, taskList);
+                subscriber.onNext(true);
+                subscriber.onCompleted();
+            } catch (JSONException e) {
+                Timber.e(e.getMessage());
+                subscriber.onError(e);
+            } catch (ParseException e) {
+                Timber.e(e.getMessage());
+                subscriber.onError(e);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
+            mTaskDataAdapter.addTaskListToDatabase(taskList);
+        });
+
+    }
+
+    private void createTaskList(String jsonString, List<Task> taskList) throws JSONException, ParseException {
+
+        JSONArray jsonArray = new JSONArray(jsonString);
+        Timber.i("Converting json to object start");
+        for (int i = 0; i < jsonArray.length(); i++) {
+            Task task = new Task();
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+            String title = jsonObject.getString("task_title");
+            String enddate = jsonObject.getString("task_end_time");
+            String startdate = jsonObject.getString("task_start_time");
+            String description = jsonObject.getString("task_description");
+            String status = jsonObject.getString("task_status");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+            task.setCompletionDate(dateFormat.parse(enddate).getTime());
+            task.setStartDate(dateFormat.parse(startdate).getTime());
+            task.setTitle(title);
+            task.setTaskStatus(Task.TaskStatus.valueOf(status));
+            task.setDescription(description);
+            taskList.add(task);
         }
-        TaskDataAdapter adapter = TaskDataAdapter.getInstance(context);
-        adapter.addTaskListToDatabase(taskList);
+        Timber.i("Converting json to object End");
     }
 
 
@@ -77,7 +107,7 @@ public class JsonParser {
                 returnString.append(line);
             }
         } catch (Exception e) {
-            e.getMessage();
+            Timber.e(e.getMessage());
         } finally {
             try {
                 if (isr != null)
@@ -90,6 +120,7 @@ public class JsonParser {
                 e2.getMessage();
             }
         }
+        Timber.i("Read file");
         return returnString.toString();
     }
 }

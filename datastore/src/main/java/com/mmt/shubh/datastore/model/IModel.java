@@ -7,7 +7,7 @@ import android.database.Cursor;
  * Created by shubham on 12/23/15.
  */
 public interface IModel<M> {
-    ContentValues toContentValue(M m);
+    ContentValues toContentValue();
 
     M parseCursor(Cursor cursor);
 }

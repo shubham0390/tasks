@@ -1,6 +1,7 @@
 package com.mmt.shubh.taskmanager.ui.views;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
@@ -17,21 +18,23 @@ public class ListRecyclerView extends RecyclerView {
 
     public ListRecyclerView(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     public ListRecyclerView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     public ListRecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
+        init(context);
     }
 
-    private void init() {
+    private void init(Context context) {
         mRecyclerTouchListener = new RecyclerTouchListener(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        setLayoutManager(linearLayoutManager);
         this.addOnItemTouchListener(mRecyclerTouchListener);
     }
 
@@ -39,7 +42,7 @@ public class ListRecyclerView extends RecyclerView {
         /**
          * Callback method to be invoked when an item in this AdapterView has
          * been clicked.
-         * <p/>
+         * <p>
          * Implementers can call getItemAtPosition(position) if they need
          * to access the data associated with the selected item.
          *
@@ -57,7 +60,7 @@ public class ListRecyclerView extends RecyclerView {
         /**
          * Callback method to be invoked when an item in this view has been
          * clicked and held.
-         * <p/>
+         * <p>
          * Implementers can call getItemAtPosition(position) if they need to access
          * the data associated with the selected item.
          *
@@ -69,11 +72,11 @@ public class ListRecyclerView extends RecyclerView {
         boolean onItemLongClick(RecyclerView parent, View view, int position, long id);
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         mRecyclerTouchListener.setOnItemClickListener(onItemClickListener);
     }
 
-    public void setOnItemLongClickListener(OnItemLongClickListener longClickListener){
+    public void setOnItemLongClickListener(OnItemLongClickListener longClickListener) {
         mRecyclerTouchListener.setOnItemLongClickListener(longClickListener);
     }
 }

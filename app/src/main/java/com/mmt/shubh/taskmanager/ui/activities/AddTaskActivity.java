@@ -13,10 +13,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.mmt.shubh.datastore.adapter.TaskDataAdapter;
+import com.mmt.shubh.datastore.model.Task;
 import com.mmt.shubh.taskmanager.R;
-import com.mmt.shubh.taskmanager.TaskStatus;
-import com.mmt.shubh.taskmanager.tasks.Task;
-import com.mmt.shubh.taskmanager.db.TaskDataAdapter;
 
 import java.util.Calendar;
 
@@ -102,15 +101,15 @@ public class AddTaskActivity extends AppCompatActivity {
             Task task = new Task();
             task.setDescription(mTaskDescriptionEditText.getText().toString());
             task.setStartDate(endDate);
-            task.setEndDate(startDate);
+            task.setCompletionDate(startDate);
             if (mStartTaskCheckBox.isChecked()) {
-                task.setTaskStatus(TaskStatus.INPROGRESS);
+                task.setTaskStatus(Task.TaskStatus.INPROGRESS);
                 task.setStartDate(System.currentTimeMillis());
             } else {
-                task.setTaskStatus(TaskStatus.NEW);
+                task.setTaskStatus(Task.TaskStatus.NEW);
             }
             task.setTitle(taskName);
-            TaskDataAdapter adapter = TaskDataAdapter.getInstance(getApplicationContext());
+            TaskDataAdapter adapter = null;
             adapter.addTask(task);
             finish();
         }

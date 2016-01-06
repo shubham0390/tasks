@@ -9,4 +9,7 @@ package com.mmt.shubh.taskmanager;
 public class Constants {
 
     public static final String NOTIFICATION_ACTION = "notification_action";
+    public static final String TAG = "Task";
+    public static final String PREFS_NAME = "TaskPrefsFile";
+    public static final String KEY_SEED_DATA_ADDED = "seedDataAdded";
 }

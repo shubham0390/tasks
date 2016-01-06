@@ -15,7 +15,7 @@ public class Selection {
     }
 
     public static final String getSelection(String columnName, char operation, String value) {
-        return columnName + " " + operation + " " + value.toString();
+        return columnName + " " + operation + " '" + value + "'";
     }
 
     public static final String getSelection(String columnName, String operation, Object[] value) {

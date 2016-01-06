@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mmt.shubh.datastore.model.Task;
 import com.mmt.shubh.taskmanager.R;
-import com.mmt.shubh.taskmanager.tasks.Task;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,6 +53,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         }
     }
 
+    public Task getItemAtPosition(int position) {
+        return mData.get(position);
+    }
+
     public static class TaskViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.task_title)
         TextView mTitleTextView;
@@ -70,8 +74,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         public void bindView(Task task) {
             mTitleTextView.setText(task.getTitle());
             mDescriptionTextView.setText(task.getDescription());
-            SimpleDateFormat dateFormat =  new SimpleDateFormat("dd");
-            mEndDateTextView.setText(dateFormat.format(task.getEndDate()));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd");
+            mEndDateTextView.setText(dateFormat.format(task.getCompletionDate()));
         }
     }
 

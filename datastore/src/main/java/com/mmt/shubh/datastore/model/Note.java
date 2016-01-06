@@ -9,7 +9,7 @@ import android.database.Cursor;
 public class Note implements IModel<Note> {
 
     @Override
-    public ContentValues toContentValue(Note note) {
+    public ContentValues toContentValue() {
         return null;
     }
 
