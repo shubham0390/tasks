@@ -3,6 +3,8 @@ package com.mmt.shubh.datastore.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.mmt.shubh.datastore.database.TaskContract;
+
 /**
  * Created by shubham on 12/23/15.
  */
@@ -15,8 +17,11 @@ public class Task implements IModel<Task> {
     private String mDescription;
 
     private long mStartDate;
+    private long mCreationDate;
 
     private long mCompletionDate;
+
+    private String mProgress;
 
     private TaskStatus mTaskStatus;
 
@@ -29,7 +34,15 @@ public class Task implements IModel<Task> {
 
     @Override
     public ContentValues toContentValue() {
-        return null;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TaskContract.TaskColumn.TITLE, mTitle);
+        contentValues.put(TaskContract.TaskColumn.DESCRIPTION, mDescription);
+        contentValues.put(TaskContract.TaskColumn.START_DATE, mStartDate);
+        contentValues.put(TaskContract.TaskColumn.COMPLETION_DATE, mCompletionDate);
+        contentValues.put(TaskContract.TaskColumn.STATUS, mTaskStatus.name());
+        contentValues.put(TaskContract.TaskColumn.CREATED_DATE, mCreationDate);
+        contentValues.put(TaskContract.TaskColumn.PROGRESS, mProgress);
+        return contentValues;
     }
 
     @Override
@@ -37,12 +50,15 @@ public class Task implements IModel<Task> {
         Task task = new Task();
         mId = cursor.getLong(0);
         mTitle = cursor.getString(1);
-        mTaskStatus = TaskStatus.valueOf(cursor.getString(2));
-        mDescription = cursor.getString(3);
-        mStartDate = cursor.getLong(4);
-        mCompletionDate = cursor.getLong(5);
+        mStartDate = cursor.getLong(2);
+        mCreationDate = cursor.getLong(3);
+        mProgress = cursor.getString(4);
+        mDescription = cursor.getString(5);
+        mCompletionDate = cursor.getLong(6);
+        mTaskStatus = TaskStatus.valueOf(cursor.getString(7));
         return task;
     }
+
 
     public long getId() {
         return mId;
@@ -90,5 +106,21 @@ public class Task implements IModel<Task> {
 
     public void setTaskStatus(TaskStatus taskStatus) {
         mTaskStatus = taskStatus;
+    }
+
+    public long getCreationDate() {
+        return mCreationDate;
+    }
+
+    public void setCreationDate(long creationDate) {
+        mCreationDate = creationDate;
+    }
+
+    public String getProgress() {
+        return mProgress;
+    }
+
+    public void setProgress(String progress) {
+        mProgress = progress;
     }
 }

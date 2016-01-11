@@ -34,10 +34,10 @@ public interface TaskContract {
             "CREATE TABLE " + TaskContract.TASK_TABLE_NAME + " (" +
                     TaskContract.TaskColumn._ID + " INTEGER PRIMARY KEY, " +
                     TaskContract.TaskColumn.TITLE + " TEXT NOT NULL, " +
-                    TaskContract.TaskColumn.DESCRIPTION + " TEXT NOT NULL, " +
+                    TaskContract.TaskColumn.DESCRIPTION + " TEXT, " +
                     TaskContract.TaskColumn.START_DATE + " TEXT NOT NULL, " +
                     TaskContract.TaskColumn.CREATED_DATE + " INTEGER NOT NULL, " +
-                    TaskContract.TaskColumn.PROGRESS + " TEXT NOT NULL, " +
+                    TaskContract.TaskColumn.PROGRESS + " TEXT , " +
                     TaskContract.TaskColumn.COMPLETION_DATE + " TEXT, " +
                     TaskContract.TaskColumn.STATUS + " TEXT" +
                     " ); ";

@@ -1,1 +1,1 @@
-include ':app', ':datastore'
+include ':app', ':datastore', ':mmtframework'
