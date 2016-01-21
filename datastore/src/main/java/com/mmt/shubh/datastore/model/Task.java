@@ -25,12 +25,7 @@ public class Task implements IModel<Task> {
 
     private TaskStatus mTaskStatus;
 
-    public enum TaskStatus {
-        NEW,
-        INPROGRESS,
-        PENDING,
-        COMPLETED
-    }
+    private long mTaskBorardKey;
 
     @Override
     public ContentValues toContentValue() {
@@ -42,6 +37,7 @@ public class Task implements IModel<Task> {
         contentValues.put(TaskContract.TaskColumn.STATUS, mTaskStatus.name());
         contentValues.put(TaskContract.TaskColumn.CREATED_DATE, mCreationDate);
         contentValues.put(TaskContract.TaskColumn.PROGRESS, mProgress);
+        contentValues.put(TaskContract.TaskColumn.TASK_BOARD_KEY, mTaskBorardKey);
         return contentValues;
     }
 
@@ -56,9 +52,9 @@ public class Task implements IModel<Task> {
         mDescription = cursor.getString(5);
         mCompletionDate = cursor.getLong(6);
         mTaskStatus = TaskStatus.valueOf(cursor.getString(7));
+        mTaskBorardKey = cursor.getLong(8);
         return task;
     }
-
 
     public long getId() {
         return mId;
@@ -122,5 +118,12 @@ public class Task implements IModel<Task> {
 
     public void setProgress(String progress) {
         mProgress = progress;
+    }
+
+    public enum TaskStatus {
+        NEW,
+        INPROGRESS,
+        PENDING,
+        COMPLETED
     }
 }

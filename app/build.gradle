@@ -49,7 +49,7 @@ dependencies {
     def daggerCompiler = "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
 
     compile project(':datastore')
-    compile project(':mmtframework')
+
 
     // App Dependencies
     compile "com.google.android.gms:play-services-gcm:$PLAY_SERVICES_VERSION"

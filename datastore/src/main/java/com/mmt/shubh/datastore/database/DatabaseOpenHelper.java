@@ -1,13 +1,12 @@
 package com.mmt.shubh.datastore.database;
 
 import android.content.Context;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * TODO:Add class comment.
- *
+ * <p>
  * Created by shubham,
  * on 12/19/15,
  */
@@ -26,9 +25,9 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         try {
             //Uncomment line below if you want to enable foreign keys
             db.execSQL("PRAGMA foreign_keys=ON;");
-
-            db.execSQL(TaskContract.CREATE_TASKS);
-            db.execSQL(TaskContract.CREATE_NOTES);
+            db.execSQL(Tables.createTaskBoardTable());
+            db.execSQL(Tables.createTaskTable());
+            db.execSQL(Tables.createNoteTable());
             //Add other tables here
             db.setTransactionSuccessful();
         } finally {

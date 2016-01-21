@@ -3,7 +3,7 @@ package com.mmt.shubh.datastore.database.adapter;
 
 import android.database.Cursor;
 
-import com.mmt.shubh.datastore.database.QueryBuilder;
+import com.mmt.shubh.database.QueryBuilder;
 import com.mmt.shubh.datastore.database.TaskContract;
 import com.squareup.sqlbrite.BriteDatabase;
 

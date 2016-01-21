@@ -1,9 +1,9 @@
 package com.mmt.shubh.datastore.firebase;
 
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.mmt.shubh.datastore.model.Task;
 
-import rx.Observable;
 import timber.log.Timber;
 
 /**
@@ -27,11 +27,10 @@ public class FirebaseDataAdapter {
         Timber.tag(getClass().getName());
     }
 
-    public Observable<Task> addTask(Task task) {
-        return Observable.create((Observable.OnSubscribe<Task>) subscriber -> {
-            mFirebase.child(USER_URL).child(userEmailId).child(TASK_URL);
-            mFirebase.push().setValue(task);
-            Timber.i("Data added to firebase successfully");
-        });
+    public void addTask(Task task) {
+        mFirebase.child(USER_URL).push().setValue("shubham");
+        mFirebase.child(USER_URL).child(TASK_URL);
+        mFirebase.push().setValue(task, (firebaseError, firebase) -> Timber.i("Add value with code %d", firebaseError.getCode()));
+        Timber.i("Data added to firebase successfully");
     }
 }

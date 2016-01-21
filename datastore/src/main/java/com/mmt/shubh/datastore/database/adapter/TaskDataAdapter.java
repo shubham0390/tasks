@@ -4,8 +4,8 @@ package com.mmt.shubh.datastore.database.adapter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 
-import com.mmt.shubh.datastore.database.QueryBuilder;
-import com.mmt.shubh.datastore.database.Selection;
+import com.mmt.shubh.database.QueryBuilder;
+import com.mmt.shubh.database.Selection;
 import com.mmt.shubh.datastore.database.TaskContract;
 import com.mmt.shubh.datastore.firebase.FirebaseDataAdapter;
 import com.mmt.shubh.datastore.model.Task;
@@ -54,7 +54,7 @@ public class TaskDataAdapter extends AbstractDataAdapter<Task> {
                         subscriber.onError(new Exception("Unable to insert data"));
                     }
                     transaction.markSuccessful();
-                    mFirebaseDataAdapter.addTask(task);
+
                     subscriber.onCompleted();
                 }
             } catch (SQLiteConstraintException e) {
@@ -75,9 +75,11 @@ public class TaskDataAdapter extends AbstractDataAdapter<Task> {
                 BriteDatabase.Transaction transaction = mDatabase.newTransaction();
                 try {
                     long result = mDatabase.insert(TABLE_NAME, task.toContentValue());
+                    mFirebaseDataAdapter.addTask(task);
                     if (result > 0) {
                         task.setId(result);
                         subscriber.onNext(task);
+
                     } else {
                         subscriber.onError(new Exception("Unable to insert data"));
                     }
