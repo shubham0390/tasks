@@ -3,15 +3,16 @@ package com.mmt.shubh.owsmtasks.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
+import com.mmt.shubh.datastore.model.TaskBoard;
 import com.mmt.shubh.owsmtasks.R;
-import com.mmt.shubh.owsmtasks.ui.fragments.TaskListFragment;
-import com.mmt.shubh.owsmtasks.ui.adapters.FragmentAdapter;
+import com.mmt.shubh.owsmtasks.ui.adapters.TaskboardAdapter;
+import com.mmt.shubh.recyclerviewlib.HorizontalRecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -23,30 +24,26 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        if (viewPager != null) {
-            setupViewPager(viewPager);
-        }
+        HorizontalRecyclerView recyclerView = (HorizontalRecyclerView) findViewById(R.id.recycler_view);
+        TaskboardAdapter adapter = new TaskboardAdapter();
+        recyclerView.setAdapter(adapter);
+        List<TaskBoard> taskBoards = new ArrayList<>();
+        TaskBoard taskBoard = new TaskBoard();
+        taskBoard.setTaskTitle("Title1");
+        taskBoard.setTaskDescription("asudfhlaisjbdvkjsdfkgjsluhgituh");
+        taskBoards.add(taskBoard);
 
+        TaskBoard taskBoard1 = new TaskBoard();
+        taskBoard1.setTaskTitle("Title1");
+        taskBoard1.setTaskDescription("jsadflkjsndlkjnelijrhfeljshdfljnjhlkjhsdk");
+        taskBoards.add(taskBoard1);
+        adapter.addData(taskBoards);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(HomeActivity.this, AddTaskActivity.class);
             startActivity(intent);
         });
-
-        TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
-
-        // Setting the ViewPager For the SlidingTabsLayout
-        tabs.setupWithViewPager(viewPager);
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        FragmentAdapter fragmentAdapter = new FragmentAdapter(getSupportFragmentManager());
-        fragmentAdapter.addFragment(new TaskListFragment(), "New");
-        fragmentAdapter.addFragment(new TaskListFragment(), "Pending");
-        fragmentAdapter.addFragment(new TaskListFragment(), "In Progress");
-        fragmentAdapter.addFragment(new TaskListFragment(), "Completed");
-        viewPager.setAdapter(fragmentAdapter);
-    }
 
 }

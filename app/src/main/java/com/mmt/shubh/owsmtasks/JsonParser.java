@@ -3,7 +3,6 @@ package com.mmt.shubh.owsmtasks;
 import android.content.Context;
 import android.content.res.AssetManager;
 
-
 import com.mmt.shubh.datastore.database.adapter.TaskDataAdapter;
 import com.mmt.shubh.datastore.model.Task;
 
@@ -85,7 +84,7 @@ public class JsonParser {
     private void createTaskList(String jsonString, List<Task> taskList) throws JSONException, ParseException {
 
         JSONArray jsonArray = new JSONArray(jsonString);
-        Timber.i("Converting json to object start");
+        Timber.i("Converting json to object start.Json array length:- %d", jsonArray.length());
         for (int i = 0; i < jsonArray.length(); i++) {
             Task task = new Task();
             JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -101,6 +100,7 @@ public class JsonParser {
             task.setStartDate(dateFormat.parse(startdate).getTime());
             task.setTitle(title);
             task.setTaskStatus(Task.TaskStatus.valueOf(status));
+            task.setProgress(task.getTaskStatus().name());
             task.setDescription(description);
             taskList.add(task);
         }
