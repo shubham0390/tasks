@@ -3,9 +3,9 @@ package com.mmt.shubh.owsmtasks.ui.injection.module;
 import android.app.Activity;
 import android.content.Context;
 
-import com.mmt.shubh.datastore.database.adapter.TaskDataAdapter;
+import com.mmt.shubh.datastore.database.adapter.TaskboardDataAdapter;
 import com.mmt.shubh.owsmtasks.ui.injection.PerActivity;
-import com.mmt.shubh.owsmtasks.ui.presenter.TaskListPresenter;
+import com.mmt.shubh.owsmtasks.ui.presenter.HomePresenter;
 
 import dagger.Module;
 import dagger.Provides;
@@ -26,16 +26,15 @@ public class HomeActivityModule {
 
     @Provides
     @PerActivity
-    Context provideContext() {
+    public Context provideContext() {
         return mActivity;
     }
 
     @Provides
     @PerActivity
-    TaskListPresenter provideTaskListPresenter(TaskDataAdapter adapter) {
-        return new TaskListPresenter(adapter);
+    public HomePresenter provideTaskListPresenter(TaskboardDataAdapter dataAdapter) {
+        return new HomePresenter(dataAdapter);
     }
-
 
 
 }

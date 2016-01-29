@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.mmt.shubh.datastore.database.adapter.TaskDataAdapter;
+import com.mmt.shubh.datastore.database.adapter.TaskboardDataAdapter;
 import com.mmt.shubh.owsmtasks.JsonParser;
 import com.mmt.shubh.owsmtasks.ui.injection.PerActivity;
 import com.mmt.shubh.owsmtasks.ui.presenter.SplashPresenter;
@@ -19,13 +20,13 @@ public class SplashActivityModule {
 
     @Provides
     @PerActivity
-    public JsonParser provideJsonParser(TaskDataAdapter adapter, Context context) {
-        return new JsonParser(adapter, context);
+    public JsonParser provideJsonParser(TaskDataAdapter adapter, Context context, TaskboardDataAdapter dataAdapter) {
+        return new JsonParser(adapter, context, dataAdapter);
     }
 
     @Provides
     @PerActivity
-    public SplashPresenter provideSplashPresenter(SharedPreferences sharedPreferences,JsonParser jsonParser) {
+    public SplashPresenter provideSplashPresenter(SharedPreferences sharedPreferences, JsonParser jsonParser) {
         return new SplashPresenter(sharedPreferences, jsonParser);
     }
 

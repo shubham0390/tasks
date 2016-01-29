@@ -4,8 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-
 import com.mmt.shubh.datastore.database.adapter.TaskDataAdapter;
+import com.mmt.shubh.datastore.database.adapter.TaskboardDataAdapter;
 import com.mmt.shubh.owsmtasks.ui.injection.module.ApplicationModule;
 import com.squareup.sqlbrite.BriteDatabase;
 
@@ -28,5 +28,7 @@ public interface ApplicationComponent {
     SharedPreferences sharedPreferences();
 
     TaskDataAdapter taskDataAdapter();
+
+    TaskboardDataAdapter taskboardDataAdapter();
 
 }

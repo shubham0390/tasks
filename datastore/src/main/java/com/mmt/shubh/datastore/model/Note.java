@@ -6,7 +6,7 @@ import android.database.Cursor;
 /**
  * Created by shubham on 12/23/15.
  */
-public class Note implements IModel<Note> {
+public class Note implements IModel {
 
     @Override
     public ContentValues toContentValue() {
@@ -14,7 +14,16 @@ public class Note implements IModel<Note> {
     }
 
     @Override
-    public Note parseCursor(Cursor cursor) {
-        return null;
+    public void parseCursor(Cursor cursor) {
+    }
+
+    @Override
+    public long getId() {
+        return 0;
+    }
+
+    @Override
+    public void setId(long id) {
+
     }
 }

@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mmt.shubh.owsmtasks.TaskApplication;
-import com.mmt.shubh.owsmtasks.ui.presenter.Presenter;
-import com.mmt.shubh.owsmtasks.ui.mvpviews.MvpView;
 import com.mmt.shubh.owsmtasks.ui.injection.component.ApplicationComponent;
+import com.mmt.shubh.owsmtasks.ui.mvpviews.MvpView;
+import com.mmt.shubh.owsmtasks.ui.presenter.Presenter;
 
 import javax.inject.Inject;
 

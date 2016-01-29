@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.mmt.shubh.datastore.database.DatabaseOpenHelper;
+import com.mmt.shubh.datastore.database.TaskContract;
 import com.mmt.shubh.datastore.database.adapter.TaskDataAdapter;
+import com.mmt.shubh.datastore.database.adapter.TaskboardDataAdapter;
 import com.mmt.shubh.datastore.firebase.FirebaseDataAdapter;
 import com.mmt.shubh.owsmtasks.Constants;
 import com.mmt.shubh.owsmtasks.ui.injection.PerActivity;
@@ -71,5 +73,10 @@ public class ApplicationModule {
         return new TaskDataAdapter(mBriteDatabase, mFirebaseDataAdapter);
     }
 
+    @Provides
+    @Singleton
+    TaskboardDataAdapter provideTaskboardDataAdapter() {
+        return new TaskboardDataAdapter(mBriteDatabase, TaskContract.TASK_BOARD_TABLE_NAME);
+    }
 
 }

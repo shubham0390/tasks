@@ -75,7 +75,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
             mTitleTextView.setText(task.getTitle());
             mDescriptionTextView.setText(task.getDescription());
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd");
-            mEndDateTextView.setText(dateFormat.format(task.getCompletionDate()));
+            mEndDateTextView.setText(dateFormat.format(task.getCompletion()));
         }
     }
 

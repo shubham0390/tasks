@@ -1,5 +1,7 @@
 package com.mmt.shubh.datastore.database.adapter;
 
+import com.mmt.shubh.datastore.model.IModel;
+
 import java.util.List;
 
 import rx.Observable;
@@ -7,16 +9,16 @@ import rx.Observable;
 /**
  * Created by shubham on 12/23/15.
  */
-public interface IDataAdapter<M> {
+public interface IDataAdapter<M extends IModel> {
 
     Observable<List<M>> getAll();
 
     M getById(long id);
 
-    long create(M m);
+    Observable<M> create(M m);
 
-    long delete(M m);
+    Observable<Long> delete(M m);
 
-    long delete(long id);
+    Observable<Long> delete(long id);
 
 }

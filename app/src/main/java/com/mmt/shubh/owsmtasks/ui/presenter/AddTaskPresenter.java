@@ -3,6 +3,7 @@ package com.mmt.shubh.owsmtasks.ui.presenter;
 import android.text.TextUtils;
 
 import com.mmt.shubh.datastore.database.adapter.TaskDataAdapter;
+import com.mmt.shubh.datastore.model.IModel;
 import com.mmt.shubh.datastore.model.Task;
 import com.mmt.shubh.owsmtasks.TaskFactory;
 import com.mmt.shubh.owsmtasks.ui.mvpviews.AddTaskView;
@@ -28,7 +29,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskView> {
 
     private Subscription mSubscription;
 
-    private Observer<Task> mTaskObserver = new Subscriber<Task>() {
+    private Observer<IModel> mTaskObserver = new Subscriber<IModel>() {
         @Override
         public void onCompleted() {
 
@@ -40,7 +41,7 @@ public class AddTaskPresenter extends BasePresenter<AddTaskView> {
         }
 
         @Override
-        public void onNext(Task task) {
+        public void onNext(IModel task) {
             if (task.getId() > 0) {
                 getMvpView().finishActivity();
             } else {
@@ -71,12 +72,12 @@ public class AddTaskPresenter extends BasePresenter<AddTaskView> {
         task.setTitle(title);
         task.setDescription(description);
         task.setStartDate(startDate);
-        task.setCompletionDate(endDate);
+        task.setCompletion(endDate);
         task.setTaskStatus(taskStatus);
         task.setProgress("0");
         task.setCreationDate(System.currentTimeMillis());
 
-        mSubscription = mTaskDataAdapter.addTask(task).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(mTaskObserver);
+        mSubscription = mTaskDataAdapter.create(task).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(mTaskObserver);
     }
 
     private boolean emptyCheck(String title) {

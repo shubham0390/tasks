@@ -3,12 +3,16 @@ package com.mmt.shubh.datastore.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mmt.shubh.datastore.TaskDeserializer;
 import com.mmt.shubh.datastore.database.TaskContract;
 
 /**
  * Created by shubham on 12/23/15.
  */
-public class Task implements IModel<Task> {
+@JsonDeserialize(using = TaskDeserializer.class)
+public class Task implements IModel {
 
     private long mId;
 
@@ -17,6 +21,7 @@ public class Task implements IModel<Task> {
     private String mDescription;
 
     private long mStartDate;
+
     private long mCreationDate;
 
     private long mCompletionDate;
@@ -42,7 +47,7 @@ public class Task implements IModel<Task> {
     }
 
     @Override
-    public Task parseCursor(Cursor cursor) {
+    public void parseCursor(Cursor cursor) {
         Task task = new Task();
         mId = cursor.getLong(0);
         mTitle = cursor.getString(1);
@@ -53,7 +58,6 @@ public class Task implements IModel<Task> {
         mCompletionDate = cursor.getLong(6);
         mTaskStatus = TaskStatus.valueOf(cursor.getString(7));
         mTaskBorardKey = cursor.getLong(8);
-        return task;
     }
 
     public long getId() {
@@ -88,13 +92,15 @@ public class Task implements IModel<Task> {
         mStartDate = startDate;
     }
 
-    public long getCompletionDate() {
+    public long getCompletion() {
         return mCompletionDate;
     }
 
-    public void setCompletionDate(long completionDate) {
+    public void setCompletion(long completionDate) {
         mCompletionDate = completionDate;
     }
+
+
 
     public TaskStatus getTaskStatus() {
         return mTaskStatus;
@@ -108,9 +114,6 @@ public class Task implements IModel<Task> {
         return mCreationDate;
     }
 
-    public void setCreationDate(long creationDate) {
-        mCreationDate = creationDate;
-    }
 
     public String getProgress() {
         return mProgress;
@@ -118,6 +121,18 @@ public class Task implements IModel<Task> {
 
     public void setProgress(String progress) {
         mProgress = progress;
+    }
+
+    public void setCreationDate(long creationDate) {
+        mCreationDate = creationDate;
+    }
+
+    public long getTaskBorardKey() {
+        return mTaskBorardKey;
+    }
+
+    public void setTaskBorardKey(long taskBorardKey) {
+        mTaskBorardKey = taskBorardKey;
     }
 
     public enum TaskStatus {

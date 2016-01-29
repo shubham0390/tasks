@@ -2,7 +2,7 @@ package com.mmt.shubh.owsmtasks.ui.presenter;
 
 import android.content.SharedPreferences;
 
-import com.mmt.shubh.datastore.model.Task;
+import com.mmt.shubh.datastore.model.IModel;
 import com.mmt.shubh.owsmtasks.Constants;
 import com.mmt.shubh.owsmtasks.JsonParser;
 import com.mmt.shubh.owsmtasks.ui.mvpviews.SplashView;
@@ -42,7 +42,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         mJsonParser.seedData()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<Task>() {
+                .subscribe(new Subscriber<IModel>() {
                     @Override
                     public void onCompleted() {
                         mSharedPreferences.edit().putBoolean(Constants.KEY_SEED_DATA_ADDED, true).apply();
@@ -55,7 +55,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                     }
 
                     @Override
-                    public void onNext(Task task) {
+                    public void onNext(IModel task) {
                         Timber.d("Task added to database with id = %s", task.getId());
                     }
                 });

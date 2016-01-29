@@ -3,23 +3,23 @@ package com.mmt.shubh.owsmtasks;
 import android.content.Context;
 import android.content.res.AssetManager;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import com.mmt.shubh.datastore.database.adapter.TaskDataAdapter;
+import com.mmt.shubh.datastore.database.adapter.TaskboardDataAdapter;
+import com.mmt.shubh.datastore.model.IModel;
 import com.mmt.shubh.datastore.model.Task;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.mmt.shubh.datastore.model.TaskBoard;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
@@ -34,33 +34,36 @@ import timber.log.Timber;
 public class JsonParser {
 
     TaskDataAdapter mTaskDataAdapter;
+    TaskboardDataAdapter mTaskboardDataAdapter;
     Context mContext;
 
     @Inject
-    public JsonParser(TaskDataAdapter taskDataAdapter, Context context) {
+    public JsonParser(TaskDataAdapter taskDataAdapter, Context context, TaskboardDataAdapter dataAdapter) {
         mTaskDataAdapter = taskDataAdapter;
+        mTaskboardDataAdapter = dataAdapter;
         mContext = context;
         Timber.tag(this.getClass().getName());
     }
 
-    public Observable<Task> seedData() {
+    public Observable<IModel> seedData() {
 
-        return Observable.create((Subscriber<? super Task> subscriber) -> {
-            String jsonString = readFromFile(mContext);
-            List<Task> taskList = new ArrayList<>();
-            try {
-                createTaskList(jsonString, taskList);
-            } catch (JSONException e) {
-                Timber.e(e.getMessage());
-                subscriber.onError(e);
-            } catch (ParseException e) {
-                Timber.e(e.getMessage());
-                subscriber.onError(e);
-            }
-            mTaskDataAdapter.addTaskListToDatabase(taskList)
+        return Observable.create((Subscriber<? super IModel> subscriber) -> {
+            createTaskboardList(readFromFile(mContext, "taskboard.json"), subscriber);
+            createTaskList(readFromFile(mContext, "task.json"), subscriber);
+        });
+    }
+
+    @DebugLog
+    private void createTaskboardList(String jsonString, Subscriber<? super IModel> subscriber) {
+        try {
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, TaskBoard.class);
+            List<TaskBoard> taskList = objectMapper.readValue(jsonString, collectionType);
+            mTaskboardDataAdapter.addDataList(taskList)
                     .observeOn(Schedulers.immediate())
                     .subscribeOn(Schedulers.immediate())
-                    .subscribe(new Subscriber<Task>() {
+                    .subscribe(new Subscriber<TaskBoard>() {
                         @Override
                         public void onCompleted() {
                             subscriber.onCompleted();
@@ -73,42 +76,53 @@ public class JsonParser {
                         }
 
                         @Override
-                        public void onNext(Task task) {
+                        public void onNext(TaskBoard task) {
                             subscriber.onNext(task);
                         }
                     });
-        });
+        } catch (IOException e) {
+            Timber.e(e.getMessage());
+        }
 
+        Timber.i("Converting json to object End");
     }
 
-    private void createTaskList(String jsonString, List<Task> taskList) throws JSONException, ParseException {
+    @DebugLog
+    private void createTaskList(String jsonString, Subscriber<? super IModel> subscriber) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, Task.class);
+            List<Task> taskList = objectMapper.readValue(jsonString, collectionType);
+            mTaskDataAdapter.addDataList(taskList)
+                    .observeOn(Schedulers.immediate())
+                    .subscribeOn(Schedulers.immediate())
+                    .subscribe(new Subscriber<IModel>() {
+                        @Override
+                        public void onCompleted() {
+                            subscriber.onCompleted();
+                        }
 
-        JSONArray jsonArray = new JSONArray(jsonString);
-        Timber.i("Converting json to object start.Json array length:- %d", jsonArray.length());
-        for (int i = 0; i < jsonArray.length(); i++) {
-            Task task = new Task();
-            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        @Override
+                        public void onError(Throwable e) {
+                            subscriber.onError(e);
+                            Timber.e(e.getMessage());
+                        }
 
-            String title = jsonObject.getString("task_title");
-            String enddate = jsonObject.getString("task_end_time");
-            String startdate = jsonObject.getString("task_start_time");
-            String description = jsonObject.getString("task_description");
-            String status = jsonObject.getString("task_status");
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
-            task.setCompletionDate(dateFormat.parse(enddate).getTime());
-            task.setStartDate(dateFormat.parse(startdate).getTime());
-            task.setTitle(title);
-            task.setTaskStatus(Task.TaskStatus.valueOf(status));
-            task.setProgress(task.getTaskStatus().name());
-            task.setDescription(description);
-            taskList.add(task);
+                        @Override
+                        public void onNext(IModel task) {
+                            subscriber.onNext(task);
+                        }
+                    });
+        } catch (IOException e) {
+            Timber.e(e.getMessage());
         }
+
         Timber.i("Converting json to object End");
     }
 
 
-    public String readFromFile(Context context) {
+    @DebugLog
+    public String readFromFile(Context context, String fileName) {
         AssetManager assetManager = context.getAssets();
 
         StringBuilder returnString = new StringBuilder();
@@ -116,7 +130,7 @@ public class JsonParser {
         InputStreamReader isr = null;
         BufferedReader input = null;
         try {
-            fIn = assetManager.open("task_database.json");
+            fIn = assetManager.open(fileName);
             isr = new InputStreamReader(fIn);
             input = new BufferedReader(isr);
             String line = "";
@@ -137,7 +151,7 @@ public class JsonParser {
                 e2.getMessage();
             }
         }
-        Timber.i("Read file");
+        Timber.i("Read file %s",fileName);
         return returnString.toString();
     }
 }
