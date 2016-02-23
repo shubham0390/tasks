@@ -8,10 +8,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mmt.shubh.datastore.TaskDeserializer;
 import com.mmt.shubh.datastore.database.TaskContract;
 
+import org.parceler.Parcel;
+
 /**
  * Created by shubham on 12/23/15.
  */
-@JsonDeserialize(using = TaskDeserializer.class)
+@Parcel(Parcel.Serialization.BEAN)
 public class Task implements IModel {
 
     private long mId;
@@ -139,6 +141,7 @@ public class Task implements IModel {
         NEW,
         INPROGRESS,
         PENDING,
-        COMPLETED
+        COMPLETE,
+        OBSULOTE
     }
 }

@@ -28,4 +28,9 @@
     <color name="red">#ff5252</color>
     <color name="light_grey">#f5f5f5</color>
 
+    <color name="task_pending">@color/red</color>
+    <color name="task_inprogress">@color/green</color>
+    <color name="task_obsolate">@android:color/holo_orange_dark</color>
+    <color name="new_task">@color/light_grey</color>
+    <color name="complete">@android:color/holo_blue_light</color>
 </resources>

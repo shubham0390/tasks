@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mmt.shubh.datastore.TaskboardDeserializer;
 import com.mmt.shubh.datastore.database.TaskContract;
 
+import org.parceler.Parcel;
+
 import java.util.List;
 
 /**
@@ -15,7 +17,7 @@ import java.util.List;
  * Created by shubham,
  * on 1/13/16,
  */
-@JsonDeserialize(using = TaskboardDeserializer.class)
+@Parcel(Parcel.Serialization.BEAN)
 public class TaskBoard implements IModel {
 
     private long mId;

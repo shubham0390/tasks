@@ -1,10 +1,14 @@
 package com.mmt.shubh.owsmtasks.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.mmt.shubh.datastore.model.TaskBoard;
 import com.mmt.shubh.owsmtasks.R;
@@ -24,7 +28,7 @@ import butterknife.OnClick;
 
 public class HomeActivity extends BaseActivity<HomeView, HomePresenter> implements HomeView {
 
-    @Bind(R.id.viewpager)
+    @Bind(R.id.recycler_view)
     ViewPager mViewPager;
 
     @Bind(R.id.fab)

@@ -13,13 +13,23 @@ import android.widget.TextView;
 
 import com.mmt.shubh.datastore.model.Task;
 import com.mmt.shubh.owsmtasks.R;
+import com.mmt.shubh.owsmtasks.TaskApplication;
 import com.mmt.shubh.owsmtasks.ui.adapters.TaskListAdapter;
+import com.mmt.shubh.owsmtasks.ui.injection.component.DaggerHomeActivityComponent;
+import com.mmt.shubh.owsmtasks.ui.injection.component.HomeActivityComponent;
+import com.mmt.shubh.owsmtasks.ui.injection.module.TaskListModule;
+import com.mmt.shubh.owsmtasks.ui.mvpviews.TaskListView;
+import com.mmt.shubh.owsmtasks.ui.presenter.TaskListPresenter;
 import com.mmt.shubh.recyclerviewlib.ListRecyclerView;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static butterknife.ButterKnife.findById;
 
 
 /**
@@ -28,17 +38,21 @@ import butterknife.ButterKnife;
  * 6:13 PM
  * TODO:Add class comment.
  */
-public class TaskListDataView extends FrameLayout implements com.mmt.shubh.owsmtasks.ui.mvpviews.TaskListView {
+public class TaskListDataView extends FrameLayout implements TaskListView {
 
-    @Bind(R.id.recycler_view)
     ListRecyclerView mRecyclerView;
-    @Bind(R.id.progress_bar)
+
     ProgressBar mProgressBar;
-    @Bind(R.id.empty_text)
+
     TextView mEmptyTextView;
-    @Bind(R.id.progress_container)
+
     FrameLayout mEmptyContainer;
-    private TaskListAdapter mTaskListAdapter;
+
+    @Inject
+    TaskListAdapter mTaskListAdapter;
+
+    @Inject
+    TaskListPresenter mTaskListPresenter;
 
     private ListRecyclerView.OnItemClickListener mOnItemClickListener = new ListRecyclerView.OnItemClickListener() {
         @Override
@@ -71,13 +85,33 @@ public class TaskListDataView extends FrameLayout implements com.mmt.shubh.owsmt
 
     private void init(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.fragment_task_list, this, true);
-        ButterKnife.bind(view);
+        mRecyclerView = (ListRecyclerView) findViewById(R.id.recycler_view);
+
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+
+        mEmptyTextView = (TextView) view.findViewById(R.id.empty_text);
+
+        mEmptyContainer = (FrameLayout) view.findViewById(R.id.progress_container);
+        if (isInEditMode()) {
+            return;
+        }
+        HomeActivityComponent component = DaggerHomeActivityComponent.builder()
+                .applicationComponent(TaskApplication.get(getContext()).getComponent())
+                .taskListModule(new TaskListModule())
+                .build();
+        component.inject(this);
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        // mTaskListPresenter.attachView(this);
+    }
 
     @Override
     public void showErrorView() {
-
+        mEmptyContainer.setVisibility(VISIBLE);
+        mEmptyTextView.setText("Unable to load task list");
     }
 
     @Override
@@ -100,5 +134,10 @@ public class TaskListDataView extends FrameLayout implements com.mmt.shubh.owsmt
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        mTaskListPresenter.detachView();
+    }
+
+    public void setTaskBoardId(long taskboardId) {
+        mTaskListPresenter.loadTaskByTaskboardId(taskboardId);
     }
 }

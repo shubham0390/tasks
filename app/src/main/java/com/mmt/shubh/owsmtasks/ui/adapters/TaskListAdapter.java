@@ -58,12 +58,18 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     }
 
     public static class TaskViewHolder extends RecyclerView.ViewHolder {
+
         @Bind(R.id.task_title)
         TextView mTitleTextView;
+
         @Bind(R.id.task_description)
         TextView mDescriptionTextView;
+
         @Bind(R.id.end_date)
         TextView mEndDateTextView;
+
+        @Bind(R.id.status)
+        TextView mStatus;
 
 
         public TaskViewHolder(View view) {
@@ -76,6 +82,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
             mDescriptionTextView.setText(task.getDescription());
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd");
             mEndDateTextView.setText(dateFormat.format(task.getCompletion()));
+            mStatus.setText(task.getTaskStatus().name());
         }
     }
 

@@ -4,6 +4,7 @@ package com.mmt.shubh.owsmtasks.ui.presenter;
 import com.mmt.shubh.datastore.database.adapter.TaskDataAdapter;
 import com.mmt.shubh.datastore.model.Task;
 import com.mmt.shubh.owsmtasks.ui.mvpviews.TaskListView;
+import com.mmt.shubh.util.DSUtil;
 
 import java.util.List;
 
@@ -32,7 +33,8 @@ public class TaskListPresenter extends BasePresenter<TaskListView> {
     public void loadData() {
         mSubscription = mTaskDataAdapter.getAll()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<List<Task>>() {
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<List<Task>>() {
                     @Override
                     public void onCompleted() {
 
@@ -59,5 +61,30 @@ public class TaskListPresenter extends BasePresenter<TaskListView> {
     public void detachView() {
         super.detachView();
         mSubscription.unsubscribe();
+    }
+
+    public void loadTaskByTaskboardId(long taskboardId) {
+        mTaskDataAdapter.getTaskByTaskboardId(taskboardId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<List<Task>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        getMvpView().showErrorView();
+                    }
+
+                    @Override
+                    public void onNext(List<Task> tasks) {
+                        if (!DSUtil.isListEmpty(tasks))
+                            getMvpView().showData(tasks);
+                        else
+                            getMvpView().showEmptyView();
+                    }
+                });
     }
 }

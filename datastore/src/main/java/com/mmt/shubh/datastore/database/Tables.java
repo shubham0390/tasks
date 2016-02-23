@@ -14,12 +14,13 @@ public class Tables {
 
     public static String createTaskBoardTable() {
 
-        String s = new TableBuilder(6)
+        String s = new TableBuilder(7)
                 .addTableName(TaskContract.TASK_BOARD_TABLE_NAME)
                 .addColumn(TaskContract.TaskBoardColumn._ID, TableBuilder.FIELD_TYPE_INTEGER, TableBuilder.CONSTRAINT_PRIMARY_KEY)
                 .addColumn(TaskContract.TaskBoardColumn.TITLE, TableBuilder.FIELD_TYPE_TEXT, TableBuilder.CONSTRAINT_NOT_NULL)
                 .addColumn(TaskContract.TaskBoardColumn.DESCRIPTION, TableBuilder.FIELD_TYPE_TEXT)
                 .addColumn(TaskContract.TaskBoardColumn.CREATED_DATE, TableBuilder.FIELD_TYPE_INTEGER, TableBuilder.CONSTRAINT_NOT_NULL)
+                .addColumn(TaskContract.TaskBoardColumn.START_DATE, TableBuilder.FIELD_TYPE_INTEGER)
                 .addColumn(TaskContract.TaskBoardColumn.PROGRESS, TableBuilder.FIELD_TYPE_TEXT, TableBuilder.CONSTRAINT_NOT_NULL)
                 .addColumn(TaskContract.TaskBoardColumn.STATUS, TableBuilder.FIELD_TYPE_TEXT, TableBuilder.CONSTRAINT_NOT_NULL)
                 .build();

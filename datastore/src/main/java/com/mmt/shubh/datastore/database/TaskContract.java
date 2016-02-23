@@ -6,6 +6,7 @@ import android.provider.BaseColumns;
  * Created by shubham on 12/19/15.
  */
 public interface TaskContract {
+
     String TASK_BOARD_TABLE_NAME = "tasks_board";
     String TASK_TABLE_NAME = "tasks";
     String NOTES_TABLE_NAME = "notes";
@@ -45,5 +46,11 @@ public interface TaskContract {
     interface NotesColumn extends BaseColumns {
         String TITLE = "description";
         String KEY_TASK = "task_id";
+    }
+
+    interface UserColumn extends BaseColumns{
+        String NAME = "name";
+        String MOBILE_NO = "mobile_no";
+        String googleTokenId = "googleTokenId";
     }
 }

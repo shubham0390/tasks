@@ -1,6 +1,7 @@
 package com.mmt.shubh.owsmtasks.ui.presenter;
 
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 
 import com.mmt.shubh.datastore.model.IModel;
 import com.mmt.shubh.owsmtasks.Constants;
@@ -34,11 +35,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     public void addSeedData() {
         boolean seedDataStatus = mSharedPreferences.getBoolean(Constants.KEY_SEED_DATA_ADDED, false);
-       /* if (!seedDataStatus){
+        if (seedDataStatus){
             Timber.i("Seed Data Seed Data already added");
             getMvpView().startHomeActivity();
             return;
-        }*/
+        }
         mJsonParser.seedData()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -61,5 +62,8 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 });
 
     }
+
+
+
 
 }

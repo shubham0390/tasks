@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 
 import com.mmt.shubh.database.QueryBuilder;
-import com.mmt.shubh.datastore.database.TaskContract;
+import com.mmt.shubh.database.Selection;
 import com.mmt.shubh.datastore.model.IModel;
 import com.squareup.sqlbrite.BriteDatabase;
 
@@ -13,6 +13,7 @@ import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
+import timber.log.Timber;
 
 /**
  * Created by shubham on 12/30/15.
@@ -25,11 +26,12 @@ public abstract class AbstractDataAdapter<M extends IModel> implements IDataAdap
     public AbstractDataAdapter(BriteDatabase database, String tableName) {
         mDatabase = database;
         TABLE_NAME = tableName;
+        Timber.tag(getClass().getName());
     }
 
     public Observable<List<M>> getAll() {
 
-        String query = QueryBuilder.createSelectQuery(TABLE_NAME, TaskContract.TASK_PROJECTION);
+        String query = new QueryBuilder().addFrom(TABLE_NAME).build();
 
         return mDatabase.createQuery(TABLE_NAME, query).mapToList(this::parseCursor);
     }
@@ -42,8 +44,6 @@ public abstract class AbstractDataAdapter<M extends IModel> implements IDataAdap
 
     public Observable<M> create(M data) {
         return Observable.create((subscriber -> {
-            if (subscriber.isUnsubscribed())
-                return;
             BriteDatabase.Transaction transaction = mDatabase.newTransaction();
             try {
                 insert(data, subscriber);
@@ -56,7 +56,6 @@ public abstract class AbstractDataAdapter<M extends IModel> implements IDataAdap
             }
         }
         ));
-
     }
 
     private void insert(M data, Subscriber<? super M> subscriber) {
@@ -82,13 +81,12 @@ public abstract class AbstractDataAdapter<M extends IModel> implements IDataAdap
     }
 
     public Observable<M> addDataList(List<M> taskList) {
+        Timber.i("Adding task to database with size %d", taskList.size());
         return Observable.create((subscriber -> {
-            if (subscriber.isUnsubscribed())
-                return;
             BriteDatabase.Transaction transaction = mDatabase.newTransaction();
             try {
                 for (M data : taskList) {
-                    insert(data, subscriber);
+                    AbstractDataAdapter.this.insert(data, subscriber);
                 }
                 transaction.markSuccessful();
                 subscriber.onCompleted();
@@ -97,8 +95,16 @@ public abstract class AbstractDataAdapter<M extends IModel> implements IDataAdap
             } finally {
                 transaction.end();
             }
-        }));
+        }
+        ));
     }
 
+    public Observable<List<M>> getData(String columnName, String columnValue) {
+        QueryBuilder queryBuilder = new QueryBuilder();
+        Selection selection = new Selection(columnName, Selection.EQUAL, columnValue);
+        queryBuilder.addFrom(TABLE_NAME)
+                .addSelection(selection);
+        return mDatabase.createQuery(TABLE_NAME, queryBuilder.build()).mapToList(this::parseCursor);
+    }
 
 }

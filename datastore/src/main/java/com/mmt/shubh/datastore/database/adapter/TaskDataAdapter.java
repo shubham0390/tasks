@@ -31,12 +31,15 @@ public class TaskDataAdapter extends AbstractDataAdapter<Task> {
     }
 
     public Observable<List<Task>> getTaskByStatus(String taskStatus) {
+        QueryBuilder queryBuilder = new QueryBuilder();
 
-        String selection = Selection.getSelection(TaskContract.TaskColumn.STATUS, Selection.EQUAL, taskStatus);
+        queryBuilder.addFrom(TABLE_NAME)
+                .addProjection(TaskContract.TASK_PROJECTION)
+                .addSelection(
+                        new Selection(TaskContract.TaskColumn.STATUS, Selection.EQUAL, taskStatus)
+                );
 
-        String query = QueryBuilder.createSelectQuery(TABLE_NAME, TaskContract.TASK_PROJECTION, new String[]{selection});
-
-        return mDatabase.createQuery(TABLE_NAME, query).mapToList(this::parseCursor);
+        return mDatabase.createQuery(TABLE_NAME, queryBuilder.build()).mapToList(this::parseCursor);
 
     }
 
@@ -45,5 +48,16 @@ public class TaskDataAdapter extends AbstractDataAdapter<Task> {
         Task task = ModelFactory.getNewTask();
         task.parseCursor(cursor);
         return task;
+    }
+
+    public Observable<List<Task>> getTaskByTaskboardId(long taskboardId) {
+        QueryBuilder queryBuilder = new QueryBuilder();
+        queryBuilder.addFrom(TABLE_NAME)
+                .addProjection(TaskContract.TASK_PROJECTION)
+                .addSelection(
+                        new Selection(TaskContract.TaskColumn.TASK_BOARD_KEY, Selection.EQUAL, String.valueOf(taskboardId))
+                );
+
+        return mDatabase.createQuery(TABLE_NAME, queryBuilder.build()).mapToList(this::parseCursor);
     }
 }
