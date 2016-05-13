@@ -6,7 +6,7 @@ package com.mmt.shubh.owsmtasks.ui.mvpviews;
  * Created by shubham,
  * on 1/7/16,
  */
-public interface AddTaskView extends MvpView {
+public interface AddTaskView extends IMVPView {
     void showTitleEmptyError();
 
     void finishActivity();

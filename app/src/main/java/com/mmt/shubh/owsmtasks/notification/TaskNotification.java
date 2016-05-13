@@ -9,13 +9,12 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
 import com.mmt.shubh.owsmtasks.Constants;
 import com.mmt.shubh.owsmtasks.R;
-import com.mmt.shubh.owsmtasks.ui.activities.HomeActivity;
+import com.mmt.shubh.owsmtasks.ui.Home.HomeActivity;
 
 /**
  * Helper class for showing and canceling task notifications.

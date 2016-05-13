@@ -5,6 +5,7 @@ import android.database.Cursor;
 
 import com.mmt.shubh.database.QueryBuilder;
 import com.mmt.shubh.datastore.database.TaskContract;
+import com.mmt.shubh.datastore.model.IModel;
 import com.squareup.sqlbrite.BriteDatabase;
 
 import java.util.List;
@@ -14,21 +15,30 @@ import rx.Observable;
 /**
  * Created by shubham on 12/30/15.
  */
-public abstract class AbstractDataAdapter<M> implements IDataAdapter<M> {
+public abstract class AbstractDataAdapter<M extends IModel> implements IDataAdapter<M> {
 
     protected final BriteDatabase mDatabase;
-    protected final String TABLE_NAME ;
+    protected final String TABLE_NAME;
 
     public AbstractDataAdapter(BriteDatabase database, String tableName) {
         mDatabase = database;
         TABLE_NAME = tableName;
     }
 
-    public Observable<List<M>> getAll() {
+    @Override
+    public Observable<List<M>> getAllObserver() {
 
         String query = QueryBuilder.createSelectQuery(TABLE_NAME, TaskContract.TASK_PROJECTION);
 
         return mDatabase.createQuery(TABLE_NAME, query).mapToList(this::parseCursor);
+    }
+
+    @Override
+    public List<M> getAll() {
+
+        String query = QueryBuilder.createSelectQuery(TABLE_NAME, TaskContract.TASK_PROJECTION);
+
+        return null;
     }
 
     protected abstract M parseCursor(Cursor cursor);
@@ -38,6 +48,20 @@ public abstract class AbstractDataAdapter<M> implements IDataAdapter<M> {
     }
 
     public long create(M m) {
+        return mDatabase.insert(TABLE_NAME, m.toContentValue());
+    }
+
+    @Override
+    public long create(List<M> mList) {
+        BriteDatabase.Transaction transaction = mDatabase.newTransaction();
+        try {
+            for (M m : mList) {
+                create(m);
+            }
+            transaction.markSuccessful();
+        } finally {
+            transaction.close();
+        }
         return 0;
     }
 

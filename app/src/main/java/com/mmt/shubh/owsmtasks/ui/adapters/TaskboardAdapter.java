@@ -63,7 +63,7 @@ public class TaskboardAdapter extends RecyclerView.Adapter<TaskboardAdapter.View
 
         public void bindView(TaskBoard taskBoard) {
             mTitleTextView.setText(taskBoard.getTitle());
-            mDescriptionTextView.setText(taskBoard.getTaskDescription());
+            mDescriptionTextView.setText(taskBoard.getDescription());
             // mTaskListDataView.showData(taskBoard.getTasks());
         }
     }

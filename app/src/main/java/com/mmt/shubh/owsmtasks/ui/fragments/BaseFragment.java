@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.mmt.shubh.owsmtasks.TaskApplication;
 import com.mmt.shubh.owsmtasks.ui.presenter.Presenter;
-import com.mmt.shubh.owsmtasks.ui.mvpviews.MvpView;
+import com.mmt.shubh.owsmtasks.ui.mvpviews.IMVPView;
 import com.mmt.shubh.owsmtasks.ui.injection.component.ApplicationComponent;
 
 import javax.inject.Inject;
@@ -21,7 +21,7 @@ import timber.log.Timber;
 /**
  * Created by shubham on 1/4/16.
  */
-public abstract class BaseFragment<V extends MvpView, P extends Presenter<V>> extends Fragment implements MvpView {
+public abstract class BaseFragment<V extends IMVPView, P extends Presenter<V>> extends Fragment implements IMVPView {
 
     @Inject
     protected P mPresenter;

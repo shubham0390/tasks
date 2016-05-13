@@ -9,11 +9,15 @@ import rx.Observable;
  */
 public interface IDataAdapter<M> {
 
-    Observable<List<M>> getAll();
+    Observable<List<M>> getAllObserver();
+
+    public List<M> getAll();
 
     M getById(long id);
 
     long create(M m);
+
+    long create(List<M> mList);
 
     long delete(M m);
 

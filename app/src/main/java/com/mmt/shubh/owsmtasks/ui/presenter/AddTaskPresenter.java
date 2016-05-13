@@ -21,7 +21,7 @@ import rx.schedulers.Schedulers;
  * Created by shubham,
  * on 1/7/16,
  */
-public class AddTaskPresenter extends BasePresenter<AddTaskView> {
+public class AddTaskPresenter extends BasePresenter<Task, AddTaskView> {
 
 
     private TaskDataAdapter mTaskDataAdapter;
@@ -93,5 +93,15 @@ public class AddTaskPresenter extends BasePresenter<AddTaskView> {
         if (mSubscription != null) {
             mSubscription.unsubscribe();
         }
+    }
+
+    @Override
+    protected void handleError(Throwable throwable) {
+
+    }
+
+    @Override
+    protected void handleData(Task task) {
+
     }
 }

@@ -26,9 +26,7 @@ public interface TaskContract {
         String TITLE = "title";
         String DESCRIPTION = "description";
         String CREATED_DATE = "created_date";
-        String START_DATE = "start_date";
         String STATUS = "status";
-        String PROGRESS = "progress";
     }
 
     interface TaskColumn extends BaseColumns {
@@ -40,6 +38,7 @@ public interface TaskContract {
         String STATUS = "status";
         String PROGRESS = "progress";
         String TASK_BOARD_KEY = "taskboard_key";
+        String TASK_TYPE = "task_type";
     }
 
     interface NotesColumn extends BaseColumns {

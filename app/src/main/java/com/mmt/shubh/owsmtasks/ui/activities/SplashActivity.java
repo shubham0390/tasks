@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.mmt.shubh.owsmtasks.R;
+import com.mmt.shubh.owsmtasks.ui.Home.HomeActivity;
 import com.mmt.shubh.owsmtasks.ui.injection.component.ApplicationComponent;
 import com.mmt.shubh.owsmtasks.ui.injection.component.DaggerSplashActivityComponent;
 import com.mmt.shubh.owsmtasks.ui.injection.component.SplashActivityComponent;

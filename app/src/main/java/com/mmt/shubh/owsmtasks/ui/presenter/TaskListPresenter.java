@@ -18,19 +18,18 @@ import timber.log.Timber;
 /**
  * Created by shubham on 1/5/16.
  */
-public class TaskListPresenter extends BasePresenter<TaskListView> {
+public class TaskListPresenter extends BasePresenter<List<Task>, TaskListView> {
 
     private TaskDataAdapter mTaskDataAdapter;
+    private Subscription mSubscription;
 
     @Inject
     public TaskListPresenter(TaskDataAdapter taskDataAdapter) {
         mTaskDataAdapter = taskDataAdapter;
     }
 
-    private Subscription mSubscription;
-
     public void loadData() {
-        mSubscription = mTaskDataAdapter.getAll()
+        mSubscription = mTaskDataAdapter.getAllObserver()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io()).subscribe(new Subscriber<List<Task>>() {
                     @Override
@@ -59,5 +58,15 @@ public class TaskListPresenter extends BasePresenter<TaskListView> {
     public void detachView() {
         super.detachView();
         mSubscription.unsubscribe();
+    }
+
+    @Override
+    protected void handleError(Throwable throwable) {
+
+    }
+
+    @Override
+    protected void handleData(List<Task> tasks) {
+
     }
 }

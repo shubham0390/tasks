@@ -11,21 +11,15 @@ import com.mmt.shubh.datastore.database.TaskContract;
 public class Task implements IModel<Task> {
 
     private long mId;
-
     private String mTitle;
-
     private String mDescription;
-
     private long mStartDate;
     private long mCreationDate;
-
     private long mCompletionDate;
-
     private String mProgress;
-
     private TaskStatus mTaskStatus;
-
-    private long mTaskBorardKey;
+    private long mTaskBoardKey;
+    private int mTaskType;
 
     @Override
     public ContentValues toContentValue() {
@@ -37,7 +31,8 @@ public class Task implements IModel<Task> {
         contentValues.put(TaskContract.TaskColumn.STATUS, mTaskStatus.name());
         contentValues.put(TaskContract.TaskColumn.CREATED_DATE, mCreationDate);
         contentValues.put(TaskContract.TaskColumn.PROGRESS, mProgress);
-        contentValues.put(TaskContract.TaskColumn.TASK_BOARD_KEY, mTaskBorardKey);
+        contentValues.put(TaskContract.TaskColumn.TASK_BOARD_KEY, mTaskBoardKey);
+        contentValues.put(TaskContract.TaskColumn.TASK_TYPE, mTaskType);
         return contentValues;
     }
 
@@ -52,7 +47,8 @@ public class Task implements IModel<Task> {
         mDescription = cursor.getString(5);
         mCompletionDate = cursor.getLong(6);
         mTaskStatus = TaskStatus.valueOf(cursor.getString(7));
-        mTaskBorardKey = cursor.getLong(8);
+        mTaskBoardKey = cursor.getLong(8);
+        mTaskType = cursor.getInt(9);
         return task;
     }
 
@@ -118,6 +114,22 @@ public class Task implements IModel<Task> {
 
     public void setProgress(String progress) {
         mProgress = progress;
+    }
+
+    public int getTaskType() {
+        return mTaskType;
+    }
+
+    public void setTaskType(int taskType) {
+        mTaskType = taskType;
+    }
+
+    public long getTaskBoardKey() {
+        return mTaskBoardKey;
+    }
+
+    public void setTaskBoardKey(long taskBoardKey) {
+        mTaskBoardKey = taskBoardKey;
     }
 
     public enum TaskStatus {

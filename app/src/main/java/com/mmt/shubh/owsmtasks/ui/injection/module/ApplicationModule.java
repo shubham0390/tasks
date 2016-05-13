@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.mmt.shubh.datastore.database.DatabaseOpenHelper;
+import com.mmt.shubh.datastore.database.adapter.TaskBoardDataAdapter;
 import com.mmt.shubh.datastore.database.adapter.TaskDataAdapter;
 import com.mmt.shubh.datastore.firebase.FirebaseDataAdapter;
 import com.mmt.shubh.owsmtasks.Constants;
@@ -16,6 +17,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import rx.schedulers.Schedulers;
 
 /**
  * Provide application-level dependencies.
@@ -32,7 +34,7 @@ public class ApplicationModule {
 
     public ApplicationModule(Application application) {
         mApplication = application;
-        mBriteDatabase = SqlBrite.create().wrapDatabaseHelper(new DatabaseOpenHelper(mApplication));
+        mBriteDatabase = SqlBrite.create().wrapDatabaseHelper(new DatabaseOpenHelper(mApplication), Schedulers.immediate());
         mFirebaseDataAdapter = new FirebaseDataAdapter("shubham.k.tyagi@gmail.com");
     }
 
@@ -69,6 +71,12 @@ public class ApplicationModule {
     @Singleton
     TaskDataAdapter provideTaskDataAdapter() {
         return new TaskDataAdapter(mBriteDatabase, mFirebaseDataAdapter);
+    }
+
+    @Provides
+    @Singleton
+    TaskBoardDataAdapter provideTaskBoardDataAdapter() {
+        return new TaskBoardDataAdapter(mBriteDatabase);
     }
 
 

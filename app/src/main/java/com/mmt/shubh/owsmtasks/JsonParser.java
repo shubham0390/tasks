@@ -3,16 +3,22 @@ package com.mmt.shubh.owsmtasks;
 import android.content.Context;
 import android.content.res.AssetManager;
 
+import com.mmt.shubh.datastore.database.adapter.TaskBoardDataAdapter;
 import com.mmt.shubh.datastore.database.adapter.TaskDataAdapter;
 import com.mmt.shubh.datastore.model.Task;
+import com.mmt.shubh.datastore.model.TaskBoard;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,7 +28,6 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -34,74 +39,87 @@ import timber.log.Timber;
 public class JsonParser {
 
     TaskDataAdapter mTaskDataAdapter;
+    TaskBoardDataAdapter mBoardDataAdapter;
     Context mContext;
 
     @Inject
-    public JsonParser(TaskDataAdapter taskDataAdapter, Context context) {
+    public JsonParser(TaskDataAdapter taskDataAdapter, Context context, TaskBoardDataAdapter boardDataAdapter) {
         mTaskDataAdapter = taskDataAdapter;
+        mBoardDataAdapter = boardDataAdapter;
         mContext = context;
         Timber.tag(this.getClass().getName());
     }
 
-    public Observable<Task> seedData() {
+    public Observable<Boolean> seedData() {
 
-        return Observable.create((Subscriber<? super Task> subscriber) -> {
-            String jsonString = readFromFile(mContext);
-            List<Task> taskList = new ArrayList<>();
-            try {
-                createTaskList(jsonString, taskList);
-            } catch (JSONException e) {
-                Timber.e(e.getMessage());
-                subscriber.onError(e);
-            } catch (ParseException e) {
-                Timber.e(e.getMessage());
-                subscriber.onError(e);
+        return Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                List<Task> taskList = new ArrayList<>();
+                List<TaskBoard> taskBoards = null;
+                try {
+                    taskBoards = JsonParser.this.createTaskBoard(getJsonStringFromUrl("https://www.mockaroo.com/5c82d660/download?count=5&key=327934b0"));
+                    createTaskList(getJsonStringFromUrl("https://www.mockaroo.com/fe011ff0/download?count=500&key=327934b0"), taskList);
+                } catch (JSONException e) {
+                    Timber.e(e.getMessage());
+                    subscriber.onError(e);
+                } catch (ParseException e) {
+                    Timber.e(e.getMessage());
+                    subscriber.onError(e);
+                }
+                mBoardDataAdapter.create(taskBoards);
+                mTaskDataAdapter.create(taskList);
+                subscriber.onCompleted();
+                subscriber.onNext(true);
             }
-            mTaskDataAdapter.addTaskListToDatabase(taskList)
-                    .observeOn(Schedulers.immediate())
-                    .subscribeOn(Schedulers.immediate())
-                    .subscribe(new Subscriber<Task>() {
-                        @Override
-                        public void onCompleted() {
-                            subscriber.onCompleted();
-                        }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            subscriber.onError(e);
-                            Timber.e(e.getMessage());
-                        }
-
-                        @Override
-                        public void onNext(Task task) {
-                            subscriber.onNext(task);
-                        }
-                    });
         });
 
+    }
+
+    private List<TaskBoard> createTaskBoard(String jsonStringFromUrl) throws JSONException, ParseException {
+        List<TaskBoard> taskBoards = new ArrayList<>();
+        JSONArray jsonArray = new JSONArray(jsonStringFromUrl);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Timber.i("Converting json to object start.Json array length:- %d", jsonArray.length());
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            TaskBoard taskBoard = new TaskBoard();
+            taskBoard.setTitle(jsonObject.getString("title"));
+            taskBoard.setDescription(jsonObject.getString("description"));
+            taskBoard.setCreateDate(dateFormat.parse(jsonObject.getString("created_date")).getTime());
+            taskBoard.setStatus(Task.TaskStatus.valueOf(jsonObject.getString("status")).ordinal());
+        }
+        return taskBoards;
     }
 
     private void createTaskList(String jsonString, List<Task> taskList) throws JSONException, ParseException {
 
         JSONArray jsonArray = new JSONArray(jsonString);
         Timber.i("Converting json to object start.Json array length:- %d", jsonArray.length());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         for (int i = 0; i < jsonArray.length(); i++) {
             Task task = new Task();
             JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-            String title = jsonObject.getString("task_title");
-            String enddate = jsonObject.getString("task_end_time");
-            String startdate = jsonObject.getString("task_start_time");
-            String description = jsonObject.getString("task_description");
-            String status = jsonObject.getString("task_status");
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            String title = jsonObject.getString("title");
+            String description = jsonObject.getString("description");
+            String startdate = jsonObject.getString("start_date");
+            String enddate = jsonObject.getString("complication_date");
+            int progress = jsonObject.getInt("progress");
+            String status = jsonObject.getString("status");
+            int boradKey = jsonObject.getInt("taskboard_key");
+            String type = jsonObject.getString("task_type");
 
-            task.setCompletionDate(dateFormat.parse(enddate).getTime());
-            task.setStartDate(dateFormat.parse(startdate).getTime());
             task.setTitle(title);
-            task.setTaskStatus(Task.TaskStatus.valueOf(status));
-            task.setProgress(task.getTaskStatus().name());
             task.setDescription(description);
+            task.setStartDate(dateFormat.parse(startdate).getTime());
+            task.setCompletionDate(dateFormat.parse(enddate).getTime());
+            task.setProgress(progress + "");
+            task.setTaskStatus(Task.TaskStatus.valueOf(status));
+            task.setTaskBoardKey(boradKey);
+
+            task.setTaskType(TaskType.valueOf(type).ordinal());
             taskList.add(task);
         }
         Timber.i("Converting json to object End");
@@ -139,5 +157,33 @@ public class JsonParser {
         }
         Timber.i("Read file");
         return returnString.toString();
+    }
+
+    private String getJsonStringFromUrl(String urlString) {
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection con = null;
+            try {
+                con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("GET");
+                int code = con.getResponseCode();
+                if (code == 200) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    String inputLine;
+                    StringBuilder response = new StringBuilder();
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
+                    return response.toString();
+                }
+            } catch (IOException e) {
+                Timber.e(e.getMessage());
+            }
+
+        } catch (MalformedURLException e) {
+            Timber.e(e.getMessage());
+        }
+        return null;
     }
 }

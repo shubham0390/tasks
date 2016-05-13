@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by shubham on 1/5/16.
  */
-public interface TaskListView extends MvpView {
+public interface TaskListView extends IMVPView {
 
     void showErrorView();
 
