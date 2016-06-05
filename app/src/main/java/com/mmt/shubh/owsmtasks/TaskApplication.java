@@ -4,10 +4,10 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.stetho.Stetho;
-import com.firebase.client.Firebase;
-import com.mmt.shubh.owsmtasks.ui.injection.component.ApplicationComponent;
-import com.mmt.shubh.owsmtasks.ui.injection.component.DaggerApplicationComponent;
-import com.mmt.shubh.owsmtasks.ui.injection.module.ApplicationModule;
+import com.mmt.shubh.owsmtasks.dagger.ApplicationComponent;
+import com.mmt.shubh.owsmtasks.views.injection.component.DaggerApplicationComponent;
+import com.mmt.shubh.owsmtasks.dagger.ApplicationModule;
+import com.mmt.shubh.owsmtasks.utility.Constants;
 
 import timber.log.Timber;
 
@@ -22,7 +22,6 @@ public class TaskApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Firebase.setAndroidContext(this);
         Stetho.initializeWithDefaults(this);
         getComponent();
         if (BuildConfig.DEBUG) {

@@ -13,14 +13,14 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.mmt.shubh.owsmtasks.ui.activities.HomeActivity"
+            android:name=".home.HomeActivity"
             android:label="@string/app_name">
         </activity>
         <activity
-            android:name="com.mmt.shubh.owsmtasks.ui.activities.AddTaskActivity"
+            android:name=".task.add.AddTaskActivity"
             android:label="@string/add_task"/>
         <activity
-            android:name="com.mmt.shubh.owsmtasks.ui.activities.SplashActivity"
+            android:name=".splash.SplashActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

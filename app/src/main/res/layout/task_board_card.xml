@@ -53,7 +53,7 @@
             android:gravity="center_horizontal"
             tools:text="3 of 50" />
 
-        <com.mmt.shubh.owsmtasks.ui.fragments.TaskListDataView
+        <com.mmt.shubh.owsmtasks.task.list.TaskListDataView
             android:id="@+id/taskList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
