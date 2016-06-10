@@ -3,7 +3,7 @@ package com.mmt.shubh.owsmtasks.home;
 import android.app.Activity;
 import android.content.Context;
 
-import com.mmt.shubh.datastore.database.adapter.TaskboardDataAdapter;
+import com.mmt.shubh.datastore.database.adapter.TaskBoardDataAdapter;
 import com.mmt.shubh.owsmtasks.dagger.PerActivity;
 
 import dagger.Module;
@@ -31,7 +31,7 @@ public class HomeActivityModule {
 
     @Provides
     @PerActivity
-    public HomePresenter provideTaskListPresenter(TaskboardDataAdapter dataAdapter) {
+    public HomePresenter provideTaskListPresenter(TaskBoardDataAdapter dataAdapter) {
         return new HomePresenter(dataAdapter);
     }
 

@@ -5,8 +5,8 @@ import android.content.Context;
 
 import com.facebook.stetho.Stetho;
 import com.mmt.shubh.owsmtasks.dagger.ApplicationComponent;
-import com.mmt.shubh.owsmtasks.views.injection.component.DaggerApplicationComponent;
 import com.mmt.shubh.owsmtasks.dagger.ApplicationModule;
+import com.mmt.shubh.owsmtasks.dagger.DaggerApplicationComponent;
 import com.mmt.shubh.owsmtasks.utility.Constants;
 
 import timber.log.Timber;

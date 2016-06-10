@@ -1,6 +1,7 @@
 package com.mmt.shubh.owsmtasks.splash;
 
 import android.content.SharedPreferences;
+import android.os.Bundle;
 
 import com.mmt.shubh.datastore.model.IModel;
 import com.mmt.shubh.owsmtasks.mvp.BasePresenter;
@@ -14,9 +15,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-/**
- * Created by shubham on 1/6/16.
- */
 public class SplashPresenter extends BasePresenter<SplashView> {
 
     final SharedPreferences mSharedPreferences;
@@ -59,10 +57,21 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                         Timber.d("Task added to database with id = %s", task.getId());
                     }
                 });
-
     }
 
 
+    @Override
+    public void onActivityRestored(Bundle bundle) {
 
+    }
 
+    @Override
+    public void onStop() {
+
+    }
+
+    @Override
+    public void onStart() {
+
+    }
 }

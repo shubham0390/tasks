@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.mmt.shubh.owsmtasks.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -24,13 +24,13 @@ import butterknife.ButterKnife;
  */
 public abstract class RecyclerViewFragment extends Fragment {
 
-    @Bind(R.id.recycler_view)
+    @BindView(R.id.recycler_view)
     protected RecyclerView mRecyclerView;
-    @Bind(R.id.empty_text)
+    @BindView(R.id.empty_text)
     TextView mEmptyText;
-    @Bind(R.id.progress_bar)
+    @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
-    @Bind(R.id.progress_container)
+    @BindView(R.id.progress_container)
     View mProgressContainer;
 
     @Nullable

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.res.AssetManager;
 
 import com.mmt.shubh.datastore.database.TaskContract;
+import com.mmt.shubh.datastore.database.adapter.TaskBoardDataAdapter;
 import com.mmt.shubh.datastore.database.adapter.TaskDataAdapter;
-import com.mmt.shubh.datastore.database.adapter.TaskboardDataAdapter;
 import com.mmt.shubh.datastore.model.IModel;
 import com.mmt.shubh.datastore.model.ModelFactory;
 import com.mmt.shubh.datastore.model.Task;
@@ -40,14 +40,14 @@ import timber.log.Timber;
 public class JsonParser {
 
     TaskDataAdapter mTaskDataAdapter;
-    TaskboardDataAdapter mTaskboardDataAdapter;
+    TaskBoardDataAdapter mTaskBoardDataAdapter;
     Context mContext;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     @Inject
-    public JsonParser(TaskDataAdapter taskDataAdapter, Context context, TaskboardDataAdapter dataAdapter) {
+    public JsonParser(TaskDataAdapter taskDataAdapter, Context context, TaskBoardDataAdapter dataAdapter) {
         mTaskDataAdapter = taskDataAdapter;
-        mTaskboardDataAdapter = dataAdapter;
+        mTaskBoardDataAdapter = dataAdapter;
         mContext = context;
         Timber.tag(this.getClass().getName());
     }
@@ -72,7 +72,7 @@ public class JsonParser {
         } catch (JSONException e) {
             Timber.e(e.getMessage());
         }
-        mTaskboardDataAdapter.addDataList(taskList)
+        mTaskBoardDataAdapter.addDataList(taskList)
                 .observeOn(Schedulers.immediate())
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(new Subscriber<TaskBoard>() {
@@ -106,12 +106,10 @@ public class JsonParser {
             taskBoard.setDescription(jsonObject.getString(TaskContract.TaskBoardColumn.DESCRIPTION));// description
             try {
                 taskBoard.setCreateDate(sdf.parse(jsonObject.getString(TaskContract.TaskBoardColumn.CREATED_DATE)).getTime());//creae date
-                taskBoard.setStartDate(sdf.parse(jsonObject.getString(TaskContract.TaskBoardColumn.START_DATE)).getTime());//start date
             } catch (ParseException e) {
                 Timber.e(e.getMessage());
             }
             taskBoard.setStatus(jsonObject.getString(TaskContract.TaskBoardColumn.STATUS));
-            taskBoard.setProgress(String.valueOf(jsonObject.get(TaskContract.TaskBoardColumn.PROGRESS)));//progress
         } catch (JSONException e) {
             e.printStackTrace();
         }

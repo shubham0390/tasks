@@ -6,12 +6,10 @@ import com.mmt.shubh.datastore.model.ModelFactory;
 import com.mmt.shubh.datastore.model.TaskBoard;
 import com.squareup.sqlbrite.BriteDatabase;
 
-/**
- * Created by subhamtyagi on 1/26/16.
- */
-public class TaskboardDataAdapter extends AbstractDataAdapter<TaskBoard> {
 
-    public TaskboardDataAdapter(BriteDatabase database, String tableName) {
+public class TaskBoardDataAdapter extends AbstractDataAdapter<TaskBoard> {
+
+    public TaskBoardDataAdapter(BriteDatabase database, String tableName) {
         super(database, tableName);
     }
 

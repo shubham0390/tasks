@@ -6,9 +6,8 @@ import android.content.SharedPreferences;
 
 import com.mmt.shubh.datastore.database.DatabaseOpenHelper;
 import com.mmt.shubh.datastore.database.TaskContract;
+import com.mmt.shubh.datastore.database.adapter.TaskBoardDataAdapter;
 import com.mmt.shubh.datastore.database.adapter.TaskDataAdapter;
-import com.mmt.shubh.datastore.database.adapter.TaskboardDataAdapter;
-import com.mmt.shubh.datastore.firebase.FirebaseDataAdapter;
 import com.mmt.shubh.owsmtasks.utility.Constants;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
@@ -17,6 +16,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import rx.schedulers.Schedulers;
 
 /**
  * Provide application-level dependencies.
@@ -28,13 +28,9 @@ public class ApplicationModule {
 
     protected BriteDatabase mBriteDatabase;
 
-    protected FirebaseDataAdapter mFirebaseDataAdapter;
-
-
     public ApplicationModule(Application application) {
         mApplication = application;
-        mBriteDatabase = SqlBrite.create().wrapDatabaseHelper(new DatabaseOpenHelper(mApplication));
-        mFirebaseDataAdapter = new FirebaseDataAdapter("shubham.k.tyagi@gmail.com");
+        mBriteDatabase = SqlBrite.create().wrapDatabaseHelper(new DatabaseOpenHelper(mApplication), Schedulers.io());
     }
 
     @Provides
@@ -61,21 +57,15 @@ public class ApplicationModule {
     }
 
     @Provides
-    @PerActivity
-    FirebaseDataAdapter provideFirebaseDataAdapter() {
-        return mFirebaseDataAdapter;
-    }
-
-    @Provides
     @Singleton
     TaskDataAdapter provideTaskDataAdapter() {
-        return new TaskDataAdapter(mBriteDatabase, mFirebaseDataAdapter);
+        return new TaskDataAdapter(mBriteDatabase);
     }
 
     @Provides
     @Singleton
-    TaskboardDataAdapter provideTaskboardDataAdapter() {
-        return new TaskboardDataAdapter(mBriteDatabase, TaskContract.TASK_BOARD_TABLE_NAME);
+    TaskBoardDataAdapter provideTaskBoardDataAdapter() {
+        return new TaskBoardDataAdapter(mBriteDatabase, TaskContract.TASK_BOARD_TABLE_NAME);
     }
 
 }

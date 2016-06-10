@@ -1,6 +1,5 @@
 package com.mmt.shubh.owsmtasks.task.list;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,18 +13,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskViewHolder> {
 
-    private final Context mContext;
 
     private List<Task> mData;
 
+    public TaskListAdapter() {
+        mData = new ArrayList<>();
+    }
 
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(mContext).inflate(R.layout.list_item_task, parent, false);
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_task, parent, false);
         return new TaskViewHolder(view);
     }
 
@@ -57,18 +58,23 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         return mData.get(position);
     }
 
+    public void addData(List<Task> taskList) {
+        mData.addAll(taskList);
+        notifyDataSetChanged();
+    }
+
     public static class TaskViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.task_title)
+        @BindView(R.id.task_title)
         TextView mTitleTextView;
 
-        @Bind(R.id.task_description)
+        @BindView(R.id.task_description)
         TextView mDescriptionTextView;
 
-        @Bind(R.id.end_date)
+        @BindView(R.id.end_date)
         TextView mEndDateTextView;
 
-        @Bind(R.id.status)
+        @BindView(R.id.status)
         TextView mStatus;
 
 
@@ -85,14 +91,4 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
             mStatus.setText(task.getTaskStatus().name());
         }
     }
-
-    public TaskListAdapter(Context context, List<Task> data) {
-        mContext = context;
-        if (data != null)
-            mData = data;
-        else
-            mData = new ArrayList<>();
-    }
-
-
 }

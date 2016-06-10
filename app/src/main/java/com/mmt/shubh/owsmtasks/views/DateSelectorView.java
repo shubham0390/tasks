@@ -21,7 +21,7 @@ import com.mmt.shubh.owsmtasks.R;
 
 import java.util.Calendar;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -34,10 +34,10 @@ import butterknife.OnClick;
 public class DateSelectorView extends RelativeLayout {
 
 
-    @Bind(R.id.time_text_view)
+    @BindView(R.id.time_text_view)
     TextView mStartTimeTextView;
 
-    @Bind(R.id.time_label_text_view)
+    @BindView(R.id.time_label_text_view)
     TextView mDateLabel;
 
     FragmentManager mFragmentManager;

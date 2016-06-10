@@ -7,31 +7,32 @@ import android.widget.EditText;
 
 import com.mmt.shubh.owsmtasks.R;
 import com.mmt.shubh.owsmtasks.base.BaseActivity;
+import com.mmt.shubh.owsmtasks.utility.Constants;
 import com.mmt.shubh.owsmtasks.views.DateSelectorView;
 import com.mmt.shubh.owsmtasks.dagger.ApplicationComponent;
-import com.mmt.shubh.owsmtasks.views.injection.component.DaggerAddTaskComponent;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AddTaskActivity extends BaseActivity<AddTaskView, AddTaskPresenter> implements AddTaskView {
 
-    @Bind(R.id.task_name)
+    @BindView(R.id.task_name)
     EditText mTaskTitleEditText;
 
-    @Bind(R.id.task_description)
+    @BindView(R.id.task_description)
     EditText mTaskDescriptionEditText;
 
-    @Bind(R.id.start_time)
+    @BindView(R.id.start_time)
     DateSelectorView mStartDateSelectorView;
 
-    @Bind(R.id.end_time)
+    @BindView(R.id.end_time)
     DateSelectorView mEndDateSelectorView;
 
-    @Bind(R.id.start_task_check_box)
+    @BindView(R.id.start_task_check_box)
     CheckBox mStartTaskCheckBox;
 
+    private long mTaskBoardId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class AddTaskActivity extends BaseActivity<AddTaskView, AddTaskPresenter>
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setUpViews();
+        mTaskBoardId = getIntent().getLongExtra(Constants.TASK_BOARD_ID, -1);
     }
 
     @Override
@@ -61,7 +63,7 @@ public class AddTaskActivity extends BaseActivity<AddTaskView, AddTaskPresenter>
 
     @OnClick(R.id.save)
     public void addTask() {
-        mPresenter.addTask(mTaskTitleEditText.getText().toString(), mTaskDescriptionEditText.getText().toString()
+        mPresenter.addTask(mTaskBoardId, mTaskTitleEditText.getText().toString(), mTaskDescriptionEditText.getText().toString()
                 , mStartDateSelectorView.getDateInMillis(), mEndDateSelectorView.getDateInMillis(), mStartTaskCheckBox.isChecked());
     }
 
@@ -81,5 +83,9 @@ public class AddTaskActivity extends BaseActivity<AddTaskView, AddTaskPresenter>
 
     }
 
+    @Override
+    public void onInvalidTaskBoardId() {
+
+    }
 
 }

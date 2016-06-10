@@ -14,13 +14,12 @@ import dagger.Component;
 @Component(
         dependencies = ApplicationComponent.class,
         modules = {
-                HomeActivityModule.class,
-                TaskListModule.class
+                HomeActivityModule.class
         }
 )
 public interface HomeActivityComponent {
 
     void inject(HomeActivity taskListDataView);
-    void inject(TaskListDataView taskListDataView);
+
 
 }

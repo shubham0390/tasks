@@ -13,5 +13,6 @@ public class Constants {
     public static final String PREFS_NAME = "TaskPrefsFile";
     public static final String KEY_SEED_DATA_ADDED = "seedDataAdded";
 
-    public static final String  TASK_BOARD="taskboard";
+    public static final String TASK_BOARD = "taskBoard";
+    public static final String TASK_BOARD_ID = "taskBoardId";
 }

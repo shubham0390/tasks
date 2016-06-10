@@ -8,21 +8,12 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.mmt.shubh.datastore.model.Task;
 import com.mmt.shubh.owsmtasks.R;
-import com.mmt.shubh.owsmtasks.TaskApplication;
-import com.mmt.shubh.owsmtasks.views.injection.component.DaggerHomeActivityComponent;
-import com.mmt.shubh.owsmtasks.home.HomeActivityComponent;
 import com.mmt.shubh.recyclerviewlib.ListRecyclerView;
 
 import java.util.List;
-
-import javax.inject.Inject;
-
-import static butterknife.ButterKnife.findById;
 
 
 /**
@@ -31,20 +22,12 @@ import static butterknife.ButterKnife.findById;
  * 6:13 PM
  * TODO:Add class comment.
  */
-public class TaskListDataView extends FrameLayout implements TaskListView {
+public class TaskListDataView extends FrameLayout {
 
     ListRecyclerView mRecyclerView;
 
-    ProgressBar mProgressBar;
-
-    TextView mEmptyTextView;
-
-    FrameLayout mEmptyContainer;
-
     TaskListAdapter mTaskListAdapter;
 
-    @Inject
-    TaskListPresenter mTaskListPresenter;
 
     private ListRecyclerView.OnItemClickListener mOnItemClickListener = new ListRecyclerView.OnItemClickListener() {
         @Override
@@ -79,58 +62,21 @@ public class TaskListDataView extends FrameLayout implements TaskListView {
         View view = LayoutInflater.from(context).inflate(R.layout.fragment_task_list, this, true);
         mRecyclerView = (ListRecyclerView) findViewById(R.id.recycler_view);
 
-        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-
-        mEmptyTextView = (TextView) view.findViewById(R.id.empty_text);
-
-        mEmptyContainer = (FrameLayout) view.findViewById(R.id.progress_container);
         if (isInEditMode()) {
             return;
         }
-        mTaskListAdapter =  new TaskListAdapter(context,null);
-        HomeActivityComponent component = DaggerHomeActivityComponent.builder()
-                .applicationComponent(TaskApplication.get(getContext()).getComponent())
-                .taskListModule(new TaskListModule())
-                .build();
-        component.inject(this);
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        // mTaskListPresenter.attachView(this);
-    }
-
-    @Override
-    public void showErrorView() {
-        mEmptyContainer.setVisibility(VISIBLE);
-        mEmptyTextView.setText("Unable to load task list");
-    }
-
-    @Override
-    public void showData(List<Task> taskList) {
-        mEmptyContainer.setVisibility(View.GONE);
-        mTaskListAdapter = new TaskListAdapter(getContext(), taskList);
+        mTaskListAdapter = new TaskListAdapter();
         mRecyclerView.setAdapter(mTaskListAdapter);
         mRecyclerView.setOnItemClickListener(mOnItemClickListener);
+    }
+
+    public void showData(List<Task> taskList) {
+        mTaskListAdapter.addData(taskList);
     }
 
     private void onClick(Task task) {
         // TODO: 1/20/16 opentaskdetailActivity
     }
 
-    @Override
-    public void showEmptyView() {
-        mProgressBar.setVisibility(View.GONE);
-    }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        mTaskListPresenter.detachView();
-    }
-
-    public void setTaskBoardId(long taskboardId) {
-        mTaskListPresenter.loadTaskByTaskboardId(taskboardId);
-    }
 }

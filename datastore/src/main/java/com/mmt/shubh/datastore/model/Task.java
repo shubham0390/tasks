@@ -3,16 +3,10 @@ package com.mmt.shubh.datastore.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.mmt.shubh.datastore.TaskDeserializer;
 import com.mmt.shubh.datastore.database.TaskContract;
 
 import org.parceler.Parcel;
 
-/**
- * Created by shubham on 12/23/15.
- */
 @Parcel(Parcel.Serialization.BEAN)
 public class Task implements IModel {
 

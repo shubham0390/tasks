@@ -3,20 +3,12 @@ package com.mmt.shubh.datastore.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.mmt.shubh.datastore.TaskboardDeserializer;
 import com.mmt.shubh.datastore.database.TaskContract;
 
 import org.parceler.Parcel;
 
 import java.util.List;
 
-/**
- * TODO:Add class comment.
- * <p>
- * Created by shubham,
- * on 1/13/16,
- */
 @Parcel(Parcel.Serialization.BEAN)
 public class TaskBoard implements IModel {
 
@@ -26,37 +18,39 @@ public class TaskBoard implements IModel {
 
     private String mDescription;
 
-    private String mProgress;
-
     private String mStatus;
 
     private long mCreateDate;
-    private long mStartDate;
 
     private List<Task> mTasks;
+
+    public TaskBoard() {
+    }
+
+    public TaskBoard(String taskBardTitle, String taskBoardDescription) {
+        mTitle = taskBardTitle;
+        mDescription = taskBoardDescription;
+        mCreateDate = System.currentTimeMillis();
+        mStatus = Status.NEW.name();
+    }
 
     @Override
     public ContentValues toContentValue() {
         ContentValues values = new ContentValues();
         values.put(TaskContract.TaskBoardColumn.TITLE, mTitle);
         values.put(TaskContract.TaskBoardColumn.DESCRIPTION, mDescription);
-        values.put(TaskContract.TaskBoardColumn.PROGRESS, mProgress);
         values.put(TaskContract.TaskBoardColumn.CREATED_DATE, mCreateDate);
-        values.put(TaskContract.TaskBoardColumn.START_DATE, mStartDate);
         values.put(TaskContract.TaskBoardColumn.STATUS, mStatus);
         return values;
     }
 
     @Override
     public void parseCursor(Cursor cursor) {
-
         mId = cursor.getLong(0);
         mTitle = cursor.getString(1);
         mDescription = cursor.getString(2);
-        mProgress = cursor.getString(3);
-        mStatus = cursor.getString(4);
-        mCreateDate = cursor.getLong(5);
-        mStartDate = cursor.getLong(6);
+        mStatus = cursor.getString(3);
+        mCreateDate = cursor.getLong(4);
     }
 
     public String getTitle() {
@@ -83,14 +77,6 @@ public class TaskBoard implements IModel {
         mId = id;
     }
 
-    public String getProgress() {
-        return mProgress;
-    }
-
-    public void setProgress(String progress) {
-        mProgress = progress;
-    }
-
     public String getStatus() {
         return mStatus;
     }
@@ -102,16 +88,9 @@ public class TaskBoard implements IModel {
     public long getCreateDate() {
         return mCreateDate;
     }
+
     public void setCreateDate(long createDate) {
         mCreateDate = createDate;
-    }
-
-    public long getStartDate() {
-        return mStartDate;
-    }
-
-    public void setStartDate(long startDate) {
-        mStartDate = startDate;
     }
 
     public List<Task> getTasks() {
@@ -120,5 +99,9 @@ public class TaskBoard implements IModel {
 
     public void setTasks(List<Task> tasks) {
         mTasks = tasks;
+    }
+
+    public enum Status {
+        NEW, COMPLETED, INPROGRESS
     }
 }

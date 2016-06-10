@@ -7,7 +7,6 @@ import com.mmt.shubh.owsmtasks.R;
 import com.mmt.shubh.owsmtasks.home.HomeActivity;
 import com.mmt.shubh.owsmtasks.base.BaseActivity;
 import com.mmt.shubh.owsmtasks.dagger.ApplicationComponent;
-import com.mmt.shubh.owsmtasks.views.injection.component.DaggerSplashActivityComponent;
 
 public class SplashActivity extends BaseActivity<SplashView, SplashPresenter> implements SplashView {
 
@@ -28,7 +27,8 @@ public class SplashActivity extends BaseActivity<SplashView, SplashPresenter> im
     @Override
     protected void onStart() {
         super.onStart();
-        mPresenter.addSeedData();
+        //mPresenter.addSeedData();
+        startHomeActivity();
     }
 
     @Override
@@ -49,4 +49,5 @@ public class SplashActivity extends BaseActivity<SplashView, SplashPresenter> im
     public void showError(String s) {
 
     }
+
 }

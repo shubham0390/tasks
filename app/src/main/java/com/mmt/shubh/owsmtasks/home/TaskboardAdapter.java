@@ -19,11 +19,11 @@ import java.util.List;
  * Created by shubham,
  * on 1/19/16,
  */
-public class TaskboardAdapter extends FragmentStatePagerAdapter {
+public class TaskBoardAdapter extends FragmentStatePagerAdapter {
 
     private List<TaskBoard> mTaskBoards = new ArrayList<>();
 
-    public TaskboardAdapter(FragmentManager fm) {
+    public TaskBoardAdapter(FragmentManager fm) {
         super(fm);
     }
 
@@ -47,4 +47,8 @@ public class TaskboardAdapter extends FragmentStatePagerAdapter {
     }
 
 
+    public void addTaskBoard(TaskBoard taskBoard) {
+        mTaskBoards.add(taskBoard);
+        notifyDataSetChanged();
+    }
 }

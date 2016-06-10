@@ -1,18 +1,14 @@
 package com.mmt.shubh.owsmtasks.home;
 
 import com.mmt.shubh.datastore.model.TaskBoard;
-import com.mmt.shubh.owsmtasks.mvp.MvpView;
+import com.mmt.shubh.owsmtasks.mvp.LCEView;
+import com.mmt.shubh.owsmtasks.mvp.MVPView;
 
 import java.util.List;
 
-/**
- * Created by subhamtyagi on 1/25/16.
- */
-public interface HomeView extends MvpView {
-    void setTaskBoardList(List<TaskBoard> taskBoards);
+public interface HomeView extends LCEView<List<TaskBoard>> {
 
-    void showError();
+    void onEmptyTitle();
 
-    void showProgress();
-
+    void addNewTaskBoard(TaskBoard taskBoard);
 }

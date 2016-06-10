@@ -1,12 +1,13 @@
 package com.mmt.shubh.owsmtasks.task.add;
 
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.mmt.shubh.datastore.database.adapter.TaskDataAdapter;
 import com.mmt.shubh.datastore.model.IModel;
 import com.mmt.shubh.datastore.model.Task;
 import com.mmt.shubh.owsmtasks.mvp.BasePresenter;
-import com.mmt.shubh.owsmtasks.utility.TaskFactory;
+import com.mmt.shubh.owsmtasks.utility.ModelFactory;
 
 import javax.inject.Inject;
 
@@ -55,9 +56,9 @@ public class AddTaskPresenter extends BasePresenter<AddTaskView> {
         mTaskDataAdapter = taskDataAdapter;
     }
 
-    public void addTask(String title, String description, long startDate, long endDate, boolean isStarted) {
+    public void addTask(long taskBoardId, String title, String description, long startDate, long endDate, boolean isStarted) {
 
-        boolean isEmpty = emptyCheck(title);
+        boolean isEmpty = emptyCheck(title, taskBoardId);
         if (isEmpty)
             return;
 
@@ -68,9 +69,10 @@ public class AddTaskPresenter extends BasePresenter<AddTaskView> {
         } else {
             taskStatus = Task.TaskStatus.NEW;
         }
-        Task task = TaskFactory.getInstance().createNewTask();
+        Task task = ModelFactory.createNewTask();
         task.setTitle(title);
         task.setDescription(description);
+        task.setTaskBorardKey(taskBoardId);
         task.setStartDate(startDate);
         task.setCompletion(endDate);
         task.setTaskStatus(taskStatus);
@@ -80,10 +82,14 @@ public class AddTaskPresenter extends BasePresenter<AddTaskView> {
         mSubscription = mTaskDataAdapter.create(task).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(mTaskObserver);
     }
 
-    private boolean emptyCheck(String title) {
+    private boolean emptyCheck(String title, long taskBoardId) {
         if (TextUtils.isEmpty(title)) {
             getMvpView().showTitleEmptyError();
             return true;
+        }
+
+        if (taskBoardId <= 0) {
+            getMvpView().onInvalidTaskBoardId();
         }
         return false;
     }
@@ -94,5 +100,20 @@ public class AddTaskPresenter extends BasePresenter<AddTaskView> {
         if (mSubscription != null) {
             mSubscription.unsubscribe();
         }
+    }
+
+    @Override
+    public void onActivityRestored(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onStop() {
+
+    }
+
+    @Override
+    public void onStart() {
+
     }
 }

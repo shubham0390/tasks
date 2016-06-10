@@ -9,11 +9,11 @@ import timber.log.Timber;
  * attachView() and detachView(). It also handles keeping a reference to the mvpView that
  * can be accessed from the children classes by calling getMVPView().
  */
-public abstract class BasePresenter<V extends MVPView> implements Presenter<V> {
+public abstract class BaseLCEPresenter<D, V extends LCEView<D>> implements Presenter<V> {
 
     private WeakReference<V> mMvpView;
 
-    public BasePresenter() {
+    public BaseLCEPresenter() {
         Timber.tag(this.getClass().getName());
     }
 
@@ -31,9 +31,44 @@ public abstract class BasePresenter<V extends MVPView> implements Presenter<V> {
         return mMvpView != null;
     }
 
-    public V getMvpView() {
+    public V getMVPView() {
         checkViewAttached();
         return mMvpView.get();
+    }
+
+    protected void showError(Throwable e) {
+        Timber.e(e.getMessage());
+        e.printStackTrace();
+        V v = getMVPView();
+        if (v != null) {
+            v.showError(getErrorMessageCode(e));
+        }
+    }
+
+    private int getErrorMessageCode(Throwable e) {
+        return 0;
+    }
+
+    protected void showProgress() {
+        V v = getMVPView();
+        if (v != null) {
+            v.showProgress();
+        }
+    }
+
+    protected void hideProgress() {
+        V v = getMVPView();
+        if (v != null) {
+            v.hideProgress();
+        }
+    }
+
+    protected void setData(D data) {
+        V v = getMVPView();
+        if (v != null) {
+            v.hideProgress();
+            v.setData(data);
+        }
     }
 
     public void checkViewAttached() {

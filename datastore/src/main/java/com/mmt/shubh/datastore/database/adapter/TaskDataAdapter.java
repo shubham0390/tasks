@@ -6,7 +6,6 @@ import android.database.Cursor;
 import com.mmt.shubh.database.QueryBuilder;
 import com.mmt.shubh.database.Selection;
 import com.mmt.shubh.datastore.database.TaskContract;
-import com.mmt.shubh.datastore.firebase.FirebaseDataAdapter;
 import com.mmt.shubh.datastore.model.ModelFactory;
 import com.mmt.shubh.datastore.model.Task;
 import com.squareup.sqlbrite.BriteDatabase;
@@ -23,11 +22,8 @@ import rx.Observable;
  */
 public class TaskDataAdapter extends AbstractDataAdapter<Task> {
 
-    FirebaseDataAdapter mFirebaseDataAdapter;
-
-    public TaskDataAdapter(BriteDatabase database, FirebaseDataAdapter firebaseDataAdapter) {
+    public TaskDataAdapter(BriteDatabase database) {
         super(database, TaskContract.TASK_TABLE_NAME);
-        this.mFirebaseDataAdapter = firebaseDataAdapter;
     }
 
     public Observable<List<Task>> getTaskByStatus(String taskStatus) {

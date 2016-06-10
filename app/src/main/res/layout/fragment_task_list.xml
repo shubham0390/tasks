@@ -10,7 +10,4 @@
         android:layout_height="match_parent"
         android:fadeScrollbars="true"
         android:scrollbars="vertical"/>
-
-    <include layout="@layout/include_list_empty_view"/>
-
 </FrameLayout>

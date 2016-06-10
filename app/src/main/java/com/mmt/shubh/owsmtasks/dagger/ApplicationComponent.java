@@ -4,8 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.mmt.shubh.datastore.database.adapter.TaskBoardDataAdapter;
 import com.mmt.shubh.datastore.database.adapter.TaskDataAdapter;
-import com.mmt.shubh.datastore.database.adapter.TaskboardDataAdapter;
 import com.squareup.sqlbrite.BriteDatabase;
 
 import javax.inject.Singleton;
@@ -28,6 +28,6 @@ public interface ApplicationComponent {
 
     TaskDataAdapter taskDataAdapter();
 
-    TaskboardDataAdapter taskboardDataAdapter();
+    TaskBoardDataAdapter taskboardDataAdapter();
 
 }
